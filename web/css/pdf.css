@@ -1,0 +1,188 @@
+
+* {
+    margin: 0;
+    padding: 0;
+ 
+}
+
+
+body {
+    font-family: "sarabun";
+    /* font-family: 'Chakra Petch', sans-serif; */
+    font-size: 14pt;
+}
+
+.table_bordered {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #000;
+    margin-bottom: 1px;
+}
+
+.table_border_less {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 5px;
+}
+
+.table_border_less td {
+    border: none;
+}
+
+.table_bordered td {
+    border: 0.5px solid #000;
+    padding: 3px;
+}
+
+
+.table_border_round {
+    border-collapse: collapse; /* ทำให้เส้นขอบไม่ซ้อนกัน */
+    border: 0.5px solid #000;
+    padding: 3px;
+}
+.table_border_round th,
+.table_border_round td {
+    border: none; /* ลบเส้นขอบของแต่ละเซลล์ */
+    margin: 2px; /* กำหนดระยะห่างภายในเซลล์ */
+}
+
+.center {
+    text-align: center;
+}
+
+.table_bordered td {
+    padding: 5px;
+    border: 1px solid black;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.text-right {
+    text-align: right;
+}
+
+table {
+    padding: 1px;
+    border-collapse: collapse; /* ทำให้เส้นขอบไม่ซ้อนกัน */
+    /* border: 1px solid black; */
+}
+
+h2 {
+    display: inline;
+    margin: 0;
+}
+
+.top_align {
+    vertical-align: top;
+    width: 200px;
+}
+
+.top_heading {
+    vertical-align: top;
+    width: 270px;
+}
+.mt3 {
+    margin-bottom: 3px;
+}
+
+.centered-heading {
+    text-align: center;
+}
+
+.page-break {
+    page-break-before: always;
+}
+
+
+.table_bordered {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table_bordered td, .table_bordered th {
+    border: 1px solid black;
+    padding: 8px;
+}
+
+.table_bordered .top_align {
+    vertical-align: top;
+}
+
+.table_bordered .center {
+    text-align: center;
+}
+
+.img-thumbnail {
+    height: 250px;
+    object-fit: cover;
+    margin: 2px;
+    border: 1px solid black;
+}
+
+.no-bottom-border {
+    border-bottom: none;
+}
+
+.full-border {
+    border: 1px solid black;
+}
+
+
+.table_border_less {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table_border_less thead th {
+    border: 1px solid black;
+    text-align: left;
+    padding: 8px;
+}
+
+.border_less {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.border_round {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
+.center_sign {
+    width: 250px;
+    text-align: center;
+    vertical-align: top;
+}
+
+.th_border {
+    border: 1px solid black;
+    text-align: left;
+    padding: 8px;
+}
+
+.table_border_less tbody td {
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+.table_border_less tbody th {
+    border: 1px solid black;
+    text-align: left;
+    padding: 8px;
+}
+
+.content-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.footer {
+    margin-top: auto;
+}
