@@ -41,6 +41,17 @@ class TasksController extends Controller
         ]);
     }
 
+    public function actionListView()
+    {
+        $searchModel = new TasksSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('list-view', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     public function actionView($id)
     {
         $model = $this->findModel($id);

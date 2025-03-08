@@ -16,33 +16,35 @@ echo Menu::widget([
 HTML
     ],
     'items' => [
-        [
-            'label' => 'Menu 1',
-            'url' => ['/menu1'], //  Array format of Url to, will be not used if have an items
-            'icon' => 'fas fa-fw fa-tachometer-alt', // optional, default to "fa fa-circle-o
-            'visible' => true, // optional, default to true
-            // 'options' => [
-            //     'liClass' => 'nav-item',
-            // ] // optional
-        ],
-        [
-            'type' => 'divider', // divider or sidebar, if not set then link menu
-            // 'label' => '', // if sidebar we will set this, if divider then no
+        // [
+        //     'label' => 'Menu 1',
+        //     'url' => ['/menu1'], //  Array format of Url to, will be not used if have an items
+        //     'icon' => 'fas fa-fw fa-tachometer-alt', // optional, default to "fa fa-circle-o
+        //     'visible' => true, // optional, default to true
+        //     // 'options' => [
+        //     //     'liClass' => 'nav-item',
+        //     // ] // optional
+        // ],
+        // [
+        //     'type' => 'divider', // divider or sidebar, if not set then link menu
+        //     // 'label' => '', // if sidebar we will set this, if divider then no
 
-        ],
+        // ],
         [
-            'label' => 'Menu 2',
-            // 'icon' => 'fa fa-menu', // optional, default to "fa fa-circle-o
+            'label' => 'Tasks',
+            'icon' => 'fas fa-home', // optional, default to "fa fa-circle-o
             'visible' => true, // optional, default to true
-            // 'subMenuTitle' => 'Menu 2 Item', // optional only when have submenutitle, if not exist will not have subMenuTitle
+            'subMenuTitle' => 'User Task', // optional only when have submenutitle, if not exist will not have subMenuTitle
             'items' => [
                 [
-                    'label' => 'Menu 2 Sub 1',
-                    'url' => ['/menu21'], //  Array format of Url to, will be not used if have an items
+                    'label' => 'Task Lists',
+                    'url' => ['/itms/tasks/index'], //  Array format of Url to, will be not used if have an items
+                    'icon' => 'fa fa-list', // optional, default to "fa fa-circle-o
                 ],
                 [
-                    'label' => 'Menu 2 Sub 2',
-                    'url' => ['/menu22'], //  Array format of Url to, will be not used if have an items
+                    'label' => 'New Task',
+                    'url' => ['/itms/tasks/create'], //  Array format of Url to, will be not used if have an items
+                    'icon' => 'fa fa-edit', // optional, default to "fa fa-circle-o
                 ],
             ]
         ],

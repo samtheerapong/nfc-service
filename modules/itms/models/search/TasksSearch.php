@@ -47,6 +47,12 @@ class TasksSearch extends Tasks
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC, // Use your timestamp column
+                    // or 'id' => SORT_DESC if you want to sort by ID
+                ]
+            ],
         ]);
 
         $this->load($params, $formName);

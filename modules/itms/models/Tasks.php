@@ -2,51 +2,25 @@
 
 namespace app\modules\itms\models;
 
+use app\components\HandleUploads;
 use Yii;
+use yii\helpers\Html;
 
-/**
- * This is the model class for table "tasks".
- *
- * @property int $id
- * @property string|null $ref_code รหัสงาน
- * @property string $title หัวข้อ
- * @property string|null $description รายละเอียด
- * @property string|null $task_date วันที่แจ้ง
- * @property int $type_id ประเภท
- * @property int $department_id หน่วยงานที่แจ้ง
- * @property string|null $user_request ผู้แจ้ง
- * @property int $status_id สถานะ
- * @property string|null $remask หมายเหตุ
- * @property int|null $task_year #ปี
- * @property int|null $task_month #เดือน
- *
- * @property TaskDepartments $taskDepartments
- * @property TaskStatus $taskStatus
- * @property TaskTypes $taskTypes
- */
 class Tasks extends \yii\db\ActiveRecord
 {
 
+    const UPLOAD_FOLDER = 'uploads/it';
 
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
         return 'tasks';
     }
 
-    /**
-     * @return \yii\db\Connection the database connection used by this AR class.
-     */
     public static function getDb()
     {
         return Yii::$app->get('dbit');
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
@@ -64,9 +38,6 @@ class Tasks extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
@@ -85,33 +56,25 @@ class Tasks extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * Gets query for [[TaskDepartments]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
     public function getTaskDepartments()
     {
         return $this->hasOne(TaskDepartments::class, ['id' => 'department_id']);
     }
 
-    /**
-     * Gets query for [[TaskStatus]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
+
     public function getTaskStatus()
     {
         return $this->hasOne(TaskStatus::class, ['id' => 'status_id']);
     }
 
-    /**
-     * Gets query for [[TaskTypes]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
     public function getTaskTypes()
     {
         return $this->hasOne(TaskTypes::class, ['id' => 'type_id']);
+    }
+
+    public function getAvatar()
+    {
+        $imgUrl = HandleUploads::getFirstShowImg($this->ref_code, self::UPLOAD_FOLDER);
+        return   $imgUrl ? Html::img($imgUrl, ['height' => '30px', 'class' => 'img-thumbnail text-center']) : '<span>No Image</span>';
     }
 }
