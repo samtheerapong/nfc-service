@@ -13,7 +13,7 @@ $this->title = Yii::t('app', 'Tickets');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ticket-index">
-    
+
 
     <p>
         <?= Html::a(Yii::t('app', 'Create Ticket'), ['create'], ['class' => 'btn btn-success btn-sm btn-w100']) ?>
@@ -28,34 +28,36 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="card-body flex-grow-1" style="background-color: <?= $color ?>20;">
                         <ul class="list-unstyled text-left">
                             <?php if (!empty($model->status_id)): ?>
-                                <li><?= $model->formatStatus(); ?></li>
+                                <li><?= $model->formatStatus() . '  ' . $model->getImpactView(); ?></li>
                             <?php endif; ?>
+                           
                             <?php if (!empty($model->ticket_code)): ?>
-                                <li><i class="fas fa-hashtag"></i> <strong>รหัส:</strong> <?= $model->ticket_code ?></li>
+                                <li><i class="fa-solid fa-screwdriver-wrench"></i> <strong>รหัส:</strong> <?= Html::a($model->ticket_code, ['/tasks/ticket/view', 'id' => $model->id], ['class' => 'text-primary']) ?></li>
+                            <?php endif; ?>
+                            <?php if (!empty($model->title)): ?>
+                                <li><i class="fas fa-tags"></i><strong> หัวข้อ:</strong> <?= Html::a($model->title, ['/tasks/ticket/view', 'id' => $model->id], ['class' => 'text-primary']) ?></li>
                             <?php endif; ?>
                             <?php if (!empty($model->ticket_date)): ?>
                                 <li><i class="fas fa-calendar-alt"></i> <strong>วันที่ต้องการ:</strong> <?= Yii::$app->thaiFormatter->asDate($model->ticket_date, 'long')  ?></li>
-                            <?php endif; ?>
-                            <?php if (!empty($model->title)): ?>
-                                <li><i class="fas fa-file-alt"></i> <strong>หัวข้อ:</strong> <?= $model->title ?></li>
                             <?php endif; ?>
                             <?php if (!empty($model->location)): ?>
                                 <li><i class="fas fa-map-marker-alt"></i> <strong>สถานที่:</strong> <?= $model->location ?></li>
                             <?php endif; ?>
                             <?php if (!empty($model->request_by)): ?>
-                                <li><i class="fas fa-user"></i> <strong>ผู้ขอ:</strong> <?= $model->request_by ?></li>
+                                <li><i class="fas fa-user"></i> <strong>ผู้ร้องขอ:</strong> <?= $model->request_by ?></li>
                             <?php endif; ?>
                             <?php if (!empty($model->created_at)): ?>
-                                <li><i class="fas fa-clock"></i> <strong>วันที่บันทึก:</strong> <?= Yii::$app->thaiFormatter->asDate($model->created_at, 'long') ?></li>
+                                <li><i class="fa-solid fa-pen"></i> <strong>วันที่บันทึก:</strong> <?= Yii::$app->thaiFormatter->asDate($model->created_at, 'long') ?></li>
                             <?php endif; ?>
+                          
                             <?php if (!empty($model->remask)): ?>
-                                <li><i class="fas fa-sticky-note"></i> <strong>หมายเหตุ:</strong> <span class="text-danger"><?= $model->remask ?></span></li>
+                                <li class="text-danger"><span><i> หมายเหตุ: <?= $model->remask ?></span></i> </li>
                             <?php endif; ?>
                         </ul>
                     </div>
                     <!-- รูปภาพ -->
                     <div class="text-center mt-2">
-                        <?= !empty($model->getUploadedFiles()->all()) ? $model->getAvatar() : HandleUploads::getNoImage(); ?>
+                        <?= !empty($model->getUploadedFiles()->all()) ? Html::a($model->getAvatar(), ['/tasks/ticket/view', 'id' => $model->id], ['class' => 'text-primary']) : HandleUploads::getNoImage(); ?>
                     </div>
                     <!-- ปุ่ม -->
                     <div class="card-footer text-center">

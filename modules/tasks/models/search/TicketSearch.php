@@ -17,7 +17,7 @@ class TicketSearch extends ticket
     public function rules()
     {
         return [
-            [['id', 'ticket_group', 'status_id'], 'integer'],
+            [['id', 'ticket_group', 'status_id','priority_id'], 'integer'],
             [['ticket_code', 'ticket_date', 'title', 'description', 'remask', 'request_by', 'created_at', 'approve_name', 'approve_date', 'approve_comment', 'location'], 'safe'],
         ];
     }
@@ -47,6 +47,9 @@ class TicketSearch extends ticket
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 16,
+            ],
         ]);
 
         $this->load($params, $formName);
@@ -62,6 +65,7 @@ class TicketSearch extends ticket
             'id' => $this->id,
             'ticket_group' => $this->ticket_group,
             'status_id' => $this->status_id,
+            'priority_id' => $this->priority_id,
         ]);
 
         $query->andFilterWhere(['like', 'ticket_code', $this->ticket_code])

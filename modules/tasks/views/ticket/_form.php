@@ -3,6 +3,7 @@
 
 use app\models\Users;
 use app\modules\tasks\models\Location;
+use app\modules\tasks\models\Priority;
 use app\modules\tasks\models\TicketGroup;
 use kartik\widgets\ActiveForm;
 use kartik\widgets\DatePicker;
@@ -82,6 +83,20 @@ use yii\helpers\Url;
                     }
                 ),
                 'options' => ['placeholder' => Yii::t('app', 'Select...')],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]);
+            ?>
+            <?= $form->field($model, 'priority_id')->widget(Select2::class, [
+                'data' => ArrayHelper::map(
+                    Priority::find()->all(),
+                    'id',
+                    function ($dataValue, $defaultValue) {
+                        return  $dataValue->name . ' : ' . $dataValue->detail;
+                    }
+                ),
+                // 'options' => ['placeholder' => Yii::t('app', 'Select...')],
                 'pluginOptions' => [
                     'allowClear' => true
                 ],

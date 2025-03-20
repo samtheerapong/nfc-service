@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </p>
         </div>
     </div>
- 
+
     <div class="card">
         <div class="card-header text-white bg-warning">
             <?= $this->title  ?>
@@ -50,6 +50,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $model->status_id ? $model->formatStatus() : '';
                                 },
                             ],
+                            
+                            [
+                                'attribute' => 'priority_id',
+                                'format' => 'raw',
+                                'value' => function ($model) {
+                                    return $model->priority_id ?  $model->getImpactView() : '';
+                                },
+                            ],
+
                             [
                                 'attribute' => 'ticket_group',
                                 'format' => 'raw',
@@ -57,6 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $model->group ?  $model->group->name : '';
                                 },
                             ],
+
                             'ticket_code',
                             'ticket_date:date',
                             'title',
