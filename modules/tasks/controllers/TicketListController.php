@@ -1,9 +1,10 @@
 <?php
 
-namespace app\modules\ticket\controllers;
+namespace app\modules\tasks\controllers;
 
-use app\modules\ticket\models\TicketList;
-use app\modules\ticket\models\search\TicketListSearch;
+use app\modules\tasks\models\TicketList;
+use app\modules\tasks\models\search\TicketListSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -22,7 +23,7 @@ class TicketListController extends Controller
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],

@@ -1,6 +1,6 @@
 <?php
 
-use app\modules\ticket\models\ticket;
+use app\modules\tasks\models\ticket;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;

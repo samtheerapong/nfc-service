@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\ticket\models;
+namespace app\modules\tasks\models;
 
 use Yii;
 

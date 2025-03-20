@@ -2,7 +2,8 @@
 
 
 use app\models\Users;
-use app\modules\ticket\models\TicketGroup;
+use app\modules\tasks\models\Location;
+use app\modules\tasks\models\TicketGroup;
 use kartik\widgets\ActiveForm;
 use kartik\widgets\DatePicker;
 use kartik\widgets\FileInput;
@@ -18,26 +19,21 @@ use yii\helpers\Url;
     $form = ActiveForm::begin([
         'type' => ActiveForm::TYPE_HORIZONTAL,
         'fieldConfig' => [
-            'template' => '{label}<div class="col-md-10">{input}{error}</div>',
-            'labelOptions' => ['class' => 'col-form-label has-star col-md-2 text-right'],
+            'template' => '{label}<div class="col-md-9">{input}{error}</div>',
+            'labelOptions' => ['class' => 'col-form-label has-star col-md-3 text-md-right text-left'],
         ],
         'options' => [
             'enctype' => 'multipart/form-data',
-            'id' => 'dynamic-form'
+            // 'id' => 'dynamic-form'
         ]
     ]);
     ?>
-
     <div class="card border-secondary">
-        <!-- Card Header -->
         <div class="card-header text-white bg-secondary">
             <?= Html::encode($this->title) ?>
         </div>
 
-        <!-- Card Body -->
         <div class="card-body">
-            <!-- Main Form Fields -->
-
             <?= $form->field($model, 'ticket_group')->dropDownList(
                 ArrayHelper::map(TicketGroup::find()->all(), 'id', 'name'), // ['prompt' => Yii::t('app', 'Select...')]
             ) ?>
@@ -77,31 +73,47 @@ use yii\helpers\Url;
                 ],
             ]);
             ?>
-            <?= $form->field($model, 'location')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'location')->widget(Select2::class, [
+                'data' => ArrayHelper::map(
+                    Location::find()->all(),
+                    'name',
+                    function ($dataValue, $defaultValue) {
+                        return  $dataValue->name;
+                    }
+                ),
+                'options' => ['placeholder' => Yii::t('app', 'Select...')],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]);
+            ?>
             <?= $form->field($model, 'remask')->textInput(['maxlength' => true]) ?>
- 
+
             <div class="mb-3 row highlight-addon field-notify-unit">
-                <label class="col-form-label has-star col-md-2 text-right" for="upload_file[]"> <?= Yii::t('app', 'Uploads') ?> </label>
-                <div class="col-md-10">
-                    <?= FileInput::widget([
-                        'name' => 'upload_file[]',
-                        'options' => ['multiple' => true, 'accept' => '.docx,.doc,.jpg,.jpeg,.png,.pdf'],
+                <label class="col-form-label has-star col-md-3 text-md-right text-left"><?php echo Yii::t('app', 'Uploads') ?></label>
+                <div class="col-md-9">
+                    <?php echo \kartik\widgets\FileInput::widget([
+                        'name'          => 'upload_file[]',
+                        'options'       => [
+                            'multiple' => true,
+                            'accept' => '.jpg,.jpeg,.png,.pdf'
+                        ],
+
                         'pluginOptions' => [
-                            'showPreview' => true,
-                            'overwriteInitial' => false,
-                            'initialPreviewShowDelete' => true,
-                            'initialPreview' => $initialPreview,
-                            'initialPreviewConfig' => $initialPreviewConfig,
-                            'uploadUrl' => Url::to(['upload']),
-                            'uploadExtraData' => [
-                                'ref' => $model->ticket_code,
-                            ],
-                            'maxFileCount' => 10
-                        ]
-                    ]); ?>
+                            'initialPreview'           => $initialPreview,
+                            'initialPreviewConfig'     => $initialPreviewConfig,
+                            'uploadUrl'                => Url::to(['upload']),
+                            'uploadExtraData'          => ['ref' => $model->ticket_code],
+                            'maxFileCount'             => 5,
+                            'language'                 => 'th',
+                            'browseLabel'              => 'เลือกไฟล์...', // ใช้ browseLabel แทน placeholder
+                            'msgPlaceholder'           => 'เลือกไฟล์ได้สูงสุด 3 ไฟล์', // เพิ่ม msgPlaceholder สำหรับ kartik FileInput
+                        ],
+                    ]) ?>
                 </div>
             </div>
         </div>
+
         <div class="card-footer">
             <div class="d-grid gap-2">
                 <?= Html::submitButton(
@@ -111,6 +123,5 @@ use yii\helpers\Url;
             </div>
         </div>
     </div>
-
     <?php ActiveForm::end(); ?>
 </div>

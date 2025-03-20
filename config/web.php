@@ -31,9 +31,6 @@ $config = [
         'tasks' => [
             'class' => 'app\modules\tasks\Module',
         ],
-        'ticket' => [
-            'class' => 'app\modules\ticket\Module',
-        ],
         'itms' => [
             'class' => 'app\modules\itms\Module',
         ],

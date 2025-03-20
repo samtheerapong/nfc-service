@@ -1,12 +1,12 @@
 <?php
 
-namespace app\modules\ticket\controllers;
+namespace app\modules\tasks\controllers;
 
 use app\components\HandleUploads;
-use app\modules\ticket\models\ticket;
-use app\modules\ticket\models\Autonumber;
-use app\modules\ticket\models\search\TicketSearch;
-use app\modules\ticket\models\TicketList;
+use app\modules\tasks\models\ticket;
+use app\modules\tasks\models\Autonumber;
+use app\modules\tasks\models\search\TicketSearch;
+use app\modules\tasks\models\TicketList;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -76,7 +76,7 @@ class TicketController extends Controller
         $model = new Ticket();
 
         $model->status_id = 1;
-        $model->ticket_date = date("Y-m-d");
+        $model->created_at = date("Y-m-d");
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
@@ -110,6 +110,8 @@ class TicketController extends Controller
         list($initialPreview, $initialPreviewConfig) = HandleUploads::getInitialPreview($model->ticket_code, Ticket::UPLOAD_FOLDER);
 
         if ($this->request->isPost && $model->load($this->request->post())) {
+            
+            $model->created_at = date("Y-m-d");
 
             $model->getUploads();
 

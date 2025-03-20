@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\ticket\models;
+namespace app\modules\tasks\models;
 
 use app\components\HandleUploads;
 use app\models\Uploads;
@@ -9,19 +9,19 @@ use yii\helpers\Html;
 
 class Ticket extends \yii\db\ActiveRecord
 {
- 
+
     const UPLOAD_FOLDER = 'uploads/ticket';
 
     public static function tableName()
     {
         return 'ticket';
     }
- 
+
     public static function getDb()
     {
         return Yii::$app->get('engineer');
     }
- 
+
     public function rules()
     {
         return [
@@ -34,7 +34,7 @@ class Ticket extends \yii\db\ActiveRecord
             [['title', 'remask', 'request_by', 'approve_name'], 'string', 'max' => 255],
         ];
     }
- 
+
     public function attributeLabels()
     {
         return [
@@ -55,9 +55,24 @@ class Ticket extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getStatus()
+    {
+        return $this->hasOne(TaskStatus::class, ['id' => 'status_id']);
+    }
+
+    public function formatStatus()
+    {
+        return $this->status_id ? '<span class="badge" style="background-color:' . $this->status->color . '">' . $this->status->name . '</span>' : '';
+    }
+
     public function getGroup()
     {
         return $this->hasOne(TicketGroup::class, ['id' => 'ticket_group']);
+    }
+
+    public function getLocation0()
+    {
+        return $this->hasOne(location::class, ['name' => 'location']);
     }
 
     // use HandleUploads from app\components\HandleUploads
@@ -81,7 +96,7 @@ class Ticket extends \yii\db\ActiveRecord
         return HandleUploads::Uploader($this->ticket_code, $isAjax, self::UPLOAD_FOLDER);
     }
 
-    
+
     public function getUploadedFiles()
     {
         return $this->hasMany(Uploads::class, ['ref' => 'ticket_code']);

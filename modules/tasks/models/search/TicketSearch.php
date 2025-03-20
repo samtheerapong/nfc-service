@@ -1,15 +1,15 @@
 <?php
 
-namespace app\modules\ticket\models\search;
+namespace app\modules\tasks\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\ticket\models\TicketList;
+use app\modules\tasks\models\ticket;
 
 /**
- * TicketListSearch represents the model behind the search form of `app\modules\ticket\models\TicketList`.
+ * TicketSearch represents the model behind the search form of `app\modules\ticket\models\ticket`.
  */
-class TicketListSearch extends TicketList
+class TicketSearch extends ticket
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class TicketListSearch extends TicketList
     public function rules()
     {
         return [
-            [['id', 'location', 'quantity'], 'integer'],
-            [['ticket_code', 'details', 'remask', 'ticket_date'], 'safe'],
+            [['id', 'ticket_group', 'status_id'], 'integer'],
+            [['ticket_code', 'ticket_date', 'title', 'description', 'remask', 'request_by', 'created_at', 'approve_name', 'approve_date', 'approve_comment', 'location'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class TicketListSearch extends TicketList
      */
     public function search($params, $formName = null)
     {
-        $query = TicketList::find();
+        $query = ticket::find();
 
         // add conditions that should always apply here
 
@@ -60,14 +60,21 @@ class TicketListSearch extends TicketList
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'location' => $this->location,
-            'quantity' => $this->quantity,
+            'ticket_group' => $this->ticket_group,
+            'status_id' => $this->status_id,
         ]);
 
         $query->andFilterWhere(['like', 'ticket_code', $this->ticket_code])
-            ->andFilterWhere(['like', 'details', $this->details])
+            ->andFilterWhere(['like', 'ticket_date', $this->ticket_date])
+            ->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'description', $this->description])
+            ->andFilterWhere(['like', 'location', $this->location])
             ->andFilterWhere(['like', 'remask', $this->remask])
-            ->andFilterWhere(['like', 'ticket_date', $this->ticket_date]);
+            ->andFilterWhere(['like', 'request_by', $this->request_by])
+            ->andFilterWhere(['like', 'created_at', $this->created_at])
+            ->andFilterWhere(['like', 'approve_name', $this->approve_name])
+            ->andFilterWhere(['like', 'approve_date', $this->approve_date])
+            ->andFilterWhere(['like', 'approve_comment', $this->approve_comment]);
 
         return $dataProvider;
     }
