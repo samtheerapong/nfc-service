@@ -14,18 +14,16 @@ use yii\filters\VerbFilter;
 use app\models\Model;
 use app\models\Uploads;
 use Exception;
+use kartik\mpdf\Pdf;
+use Mpdf\Config\ConfigVariables;
+use Mpdf\Config\FontVariables;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
 
-/**
- * TicketController implements the CRUD actions for Ticket model.
- */
 class TicketController extends Controller
 {
-    /**
-     * @inheritDoc
-     */
+
     public function behaviors()
     {
         return array_merge(
@@ -75,14 +73,22 @@ class TicketController extends Controller
     {
         $model = new Ticket();
 
+        $identity = Yii::$app->user->identity ?: 'Anonymous';
+        $model->request_by = $identity->thai_name;
+
+        $today = date("Y-m-d");
+        $model->ticket_date = $today;
+        $model->broken_date = $today;
+        $model->created_at = $today;
+
         $model->status_id = 1;
-        $model->created_at = date("Y-m-d");
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
 
-                $model->ticket_code = Autonumber::generate('TK-' . (date('y') + 43) . date('m') . '-????'); // Auto Number
-                // $model->thainame =  $model->users->thai_name;
+                $model->ticket_code = Autonumber::generate('RP-' . (date('y') + 43) . date('m') . '-????'); // Auto Number
+
+
                 $model->getUploads();
 
                 if ($model->save()) {
@@ -101,7 +107,7 @@ class TicketController extends Controller
         ]);
     }
 
- 
+
 
     public function actionUpdate($id)
     {
@@ -110,7 +116,7 @@ class TicketController extends Controller
         list($initialPreview, $initialPreviewConfig) = HandleUploads::getInitialPreview($model->ticket_code, Ticket::UPLOAD_FOLDER);
 
         if ($this->request->isPost && $model->load($this->request->post())) {
-            
+
             $model->created_at = date("Y-m-d");
 
             $model->getUploads();
@@ -135,7 +141,7 @@ class TicketController extends Controller
 
         return $this->redirect(['index']);
     }
- 
+
     protected function findModel($id)
     {
         if (($model = Ticket::findOne(['id' => $id])) !== null) {
@@ -262,5 +268,58 @@ class TicketController extends Controller
             'model' => $model,
             'modelsList' => (empty($modelsList)) ? [new TicketList] : $modelsList
         ]);
+    }
+
+    /****** PDF ****** */
+    public function actionExportDocument($id)
+    {
+        $model = $this->findModel($id);
+
+        // $today = date("Y-m-d");
+
+        // $dataRequestDetail = new \yii\data\ActiveDataProvider([
+        //     'query' => RequestDetailSearch::find()->where(['request_ref' => $model->id]),
+        //     'pagination' => [
+        //         'pageSize' => 100, // Adjust the page size as needed
+        //     ],
+        // ]);
+
+        $content = $this->renderPartial('export-document', [
+            'model' => $model,
+            // 'dataRequestDetail' => $dataRequestDetail,
+        ]);
+
+        $pdf = new Pdf([
+            'mode' => Pdf::MODE_UTF8,
+            'format' => Pdf::FORMAT_A4,
+            'orientation' => Pdf::ORIENT_PORTRAIT,
+            'destination' => Pdf::DEST_BROWSER,
+            'content' => $content,
+            'cssFile' => '@app/web/css/pdf.css',
+            'cssInline' => '.bd{border:1.5px solid; text-align: center;} .ar{text-align:right} .imgbd{border:1px solid}',
+            'options' => ['title' => 'Preview Report Case: ' . $id],
+            'methods' => [],
+            'marginLeft' => 10,
+            'marginRight' => 10,
+            'marginTop' => 10,
+            'marginBottom' => 10,
+            'marginFooter' => 5,
+            'filename' => $model->ticket_code . '.pdf', // Set PDF filename here
+        ]);
+        $defaultConfig = (new ConfigVariables())->getDefaults();
+        $fontDirs = $defaultConfig['fontDir'];
+        $defaultFontConfig = (new FontVariables())->getDefaults();
+        $fontData = $defaultFontConfig['fontdata'];
+        $pdf->options['fontDir'] = array_merge($fontDirs, [
+            Yii::getAlias('@webroot') . '/fonts'
+        ]);
+        $pdf->options['fontdata'] = $fontData + [
+            'sarabun' => [
+                'R' => 'THSarabunNew.ttf',
+            ],
+        ];
+
+
+        return $pdf->render();
     }
 }

@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a('<i class="fas fa-home"></i> ' . Yii::t('app', 'Home'), ['index'], ['class' => 'btn btn-primary btn-sm btn-w100']) ?>
         </div>
         <div class="btn-group-wrapper">
+            <?= Html::a('<i class="fa-regular fa-file-pdf"></i> ใบแจ้งซ่อม', ['export-document', 'id' => $model->id], ['class' => 'btn btn-outline-primary btn-sm btn-w100', 'target' => '_blank',]) ?>
             <?= Html::a('<i class="fas fa-edit"></i> แก้ไข', ['update', 'id' => $model->id], ['class' => 'btn btn-outline-warning btn-sm btn-w100', 'style' => 'border-color: #666666;']) ?>
             <?= Html::a('<i class="fas fa-trash"></i> ลบ', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-outline-danger btn-sm btn-w100',
@@ -50,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $model->status_id ? $model->formatStatus() : '';
                                 },
                             ],
-                            
+
                             [
                                 'attribute' => 'priority_id',
                                 'format' => 'raw',

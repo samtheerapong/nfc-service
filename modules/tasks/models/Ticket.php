@@ -25,13 +25,13 @@ class Ticket extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['ticket_group', 'ticket_date', 'request_by', 'title', 'location', 'priority_id'], 'required'],
+            [['ticket_group', 'ticket_date', 'request_by', 'title', 'location', 'priority_id', 'description'], 'required'],
             [['ticket_code', 'ticket_date', 'title', 'description', 'remask', 'request_by', 'created_at', 'approve_name', 'approve_date', 'approve_comment'], 'default', 'value' => null],
             [['status_id'], 'default', 'value' => 1],
             [['ticket_group', 'status_id', 'priority_id'], 'integer'],
             [['description', 'approve_comment'], 'string'],
             [['ticket_code', 'ticket_date', 'created_at', 'approve_date', 'location'], 'string', 'max' => 45],
-            [['title', 'remask', 'request_by', 'approve_name'], 'string', 'max' => 255],
+            [['title', 'remask', 'request_by', 'approve_name', 'broken_date'], 'string', 'max' => 255],
         ];
     }
 
@@ -42,7 +42,8 @@ class Ticket extends \yii\db\ActiveRecord
             'ticket_group' => Yii::t('app', 'กลุ่มงาน'),
             'ticket_code' => Yii::t('app', 'รหัส'),
             'ticket_date' => Yii::t('app', 'วันที่ต้องการ'),
-            'title' => Yii::t('app', 'หัวข้อ'),
+            'broken_date' => Yii::t('app', 'วันที่เสีย'),
+            'title' => Yii::t('app', 'หัวเรื่อง'),
             'description' => Yii::t('app', 'รายละเอียด'),
             'priority_id' => Yii::t('app', 'ผลกระทบ'),
             'location' => Yii::t('app', 'สถานที่'),
@@ -126,6 +127,6 @@ class Ticket extends \yii\db\ActiveRecord
     {
         $color = $this->priority->color ?? '#ccc'; // ใช้สีเริ่มต้นหากไม่มีข้อมูล
         $detail = $this->priority->detail ?? '-'; // ใช้ "-" หากไม่มีข้อมูล
-        return  '<span class="badge" style="background-color:' . $color. '">' . $detail. '</span>';
+        return  '<span class="badge" style="background-color:' . $color . '">' . $detail . '</span>';
     }
 }

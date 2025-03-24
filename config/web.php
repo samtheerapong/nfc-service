@@ -6,6 +6,7 @@ $params = require __DIR__ . '/params.php';
 $db = require __DIR__ . '/db.php';
 $engineer = require __DIR__ . '/engineer.php';
 $dbit = require __DIR__ . '/dbit.php';
+$dbstock = require __DIR__ . '/dbstock.php';
 
 $config = [
     'id' =>  env('ID'),
@@ -34,6 +35,9 @@ $config = [
         'itms' => [
             'class' => 'app\modules\itms\Module',
         ],
+        'stock' => [
+            'class' => 'app\modules\stock\Module',
+        ],
     ],
     'components' => [
         'image' => [
@@ -61,7 +65,7 @@ $config = [
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => 'uzzy2GbS9s6BZczgaA3gHKEvcsSljuM-',
+            'cookieValidationKey' => 'my-secret-key-nfc-service',
             'baseUrl' => str_replace('/web', '', (new Request())->getBaseUrl()), // ข้าม /web/', ใส่ .htasset ที่นอกสุดด้วย
         ],
         'cache' => [
@@ -69,7 +73,13 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\User',
-            'enableAutoLogin' => true,
+            'enableAutoLogin' => true, // เปิดใช้งาน Remember Me
+            // 'authTimeout' => 120, // 2 นาที
+            // 'identityCookie' => [
+            //     'name' => '_identity', // ชื่อคุกกี้
+            //     'httpOnly' => true,    // ป้องกันไม่ให้เข้าถึงคุกกี้ผ่าน JavaScript
+            //     'sameSite' => 'Lax',   // เพิ่มความปลอดภัย (ป้องกัน Cross-Site Request Forgery)
+            // ],
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -99,6 +109,7 @@ $config = [
         'db' => $db,
         'engineer' => $engineer,
         'dbit' => $dbit,
+        'dbstock' => $dbstock,
         'i18n' => [
             'translations' => [
                 'app*' => [

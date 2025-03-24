@@ -17,8 +17,8 @@ class TicketSearch extends ticket
     public function rules()
     {
         return [
-            [['id', 'ticket_group', 'status_id','priority_id'], 'integer'],
-            [['ticket_code', 'ticket_date', 'title', 'description', 'remask', 'request_by', 'created_at', 'approve_name', 'approve_date', 'approve_comment', 'location'], 'safe'],
+            [['id', 'ticket_group', 'status_id', 'priority_id'], 'integer'],
+            [['ticket_code', 'ticket_date', 'title', 'description', 'remask', 'request_by', 'created_at', 'approve_name', 'approve_date', 'approve_comment', 'location', 'broken_date'], 'safe'],
         ];
     }
 
@@ -78,6 +78,7 @@ class TicketSearch extends ticket
             ->andFilterWhere(['like', 'created_at', $this->created_at])
             ->andFilterWhere(['like', 'approve_name', $this->approve_name])
             ->andFilterWhere(['like', 'approve_date', $this->approve_date])
+            ->andFilterWhere(['like', 'broken_date', $this->broken_date])
             ->andFilterWhere(['like', 'approve_comment', $this->approve_comment]);
 
         return $dataProvider;

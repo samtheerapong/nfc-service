@@ -11,6 +11,11 @@ use yii\helpers\Url;
             <?= \hail812\adminlte\widgets\Menu::widget([
                 'items' => [
                     ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index'], 'iconStyle' => 'bx', 'icon' => 'bx bxs-home text-success'],
+                    ['label' => Yii::t('app', 'แจ้งงาน'), 'url' => ['/tasks/ticket/create'], 'iconStyle' => 'fa', 'icon' => 'fa-solid fa-wrench'],
+                    ['label' => Yii::t('app', 'รายการแจ้งของแผนก'), 'url' => ['/tasks/ticket/index'], 'iconStyle' => 'fa', 'icon' => 'fa-regular fa-rectangle-list'],
+                    ['label' => Yii::t('app', 'รายการรออนุมัติ'), 'url' => ['/tasks/ticket/approve-dep'], 'iconStyle' => 'fa', 'icon' => 'fa-regular fa-rectangle-list'],
+                    ['label' => Yii::t('app', 'รายการซ่อม'), 'url' => ['/tasks/ticket/in-progress'], 'iconStyle' => 'fa', 'icon' => 'fa-regular fa-rectangle-list'],
+                    ['label' => Yii::t('app', 'รายการเสร็จ'), 'url' => ['/tasks/ticket/successfully'], 'iconStyle' => 'fa', 'icon' => 'fa-regular fa-rectangle-list'],
                     [
                         // 'visible' => $notUser,
                         'label' => Yii::t('app', 'Engineer'),
@@ -26,6 +31,8 @@ use yii\helpers\Url;
                                     ['label' => Yii::t('app', 'Technician'), 'url' => ['/tasks/technician/index'], 'iconStyle' => 'bx', 'icon' => 'bx bxs-home text-success'],
                                     ['label' => Yii::t('app', 'Team'), 'url' => ['/tasks/teams/index'], 'iconStyle' => 'bx', 'icon' => 'bx bxs-home text-success'],
                                     ['label' => Yii::t('app', 'Role'), 'url' => ['/tasks/team-roles/index'], 'iconStyle' => 'bx', 'icon' => 'bx bxs-home text-success'],
+                                    ['label' => Yii::t('app', 'User'), 'header' => true, 'options' => ['style' => 'color: yellow;']],
+                                   
                                 ],
                             ],
                         ],

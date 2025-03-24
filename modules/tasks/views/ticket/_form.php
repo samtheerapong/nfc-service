@@ -38,26 +38,7 @@ use yii\helpers\Url;
             <?= $form->field($model, 'ticket_group')->dropDownList(
                 ArrayHelper::map(TicketGroup::find()->all(), 'id', 'name'), // ['prompt' => Yii::t('app', 'Select...')]
             ) ?>
-
-            <?= $form->field($model, 'ticket_date')->widget(
-                DatePicker::class,
-                [
-                    'options' => [
-                        'required' => true,
-                    ],
-                    'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-                    'pluginOptions' => [
-                        'format' => 'yyyy-mm-dd',
-                        'todayHighlight' => true,
-                        'autoclose' => true,
-                        'timezone' => 'Asia/Bangkok', // Set Bangkok timezone
-                        'orientation' => 'bottom', // เลื่อนลงด้านล่าง
-                        'todayBtn' => "linked",
-                        'startDate' => date('Y-m-d', strtotime('+0 days')), // ไม่ให้เลือกวันที่ก่อนหน้าวันปัจจุบัน
-                        // 'daysOfWeekDisabled' => [0, 6], // ปิดใช้งานวันอาทิตย์ (0 = อาทิตย์, 1 = จันทร์, ..., 6 = เสาร์)
-                    ]
-                ]
-            ); ?>
+ 
             <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'description')->textarea(['rows' => 3]) ?>
             <?= $form->field($model, 'request_by')->widget(Select2::class, [
@@ -74,6 +55,44 @@ use yii\helpers\Url;
                 ],
             ]);
             ?>
+             <?= $form->field($model, 'ticket_date')->widget(
+                DatePicker::class,
+                [
+                    'options' => [
+                        'required' => true,
+                    ],
+                    'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'todayHighlight' => true,
+                        'autoclose' => true,
+                        'timezone' => 'Asia/Bangkok', // Set Bangkok timezone
+                        'orientation' => 'bottom', // เลื่อนลงด้านล่าง
+                        'todayBtn' => "linked",
+                        // 'startDate' => date('Y-m-d', strtotime('+0 days')), // ไม่ให้เลือกวันที่ก่อนหน้าวันปัจจุบัน
+                        // 'daysOfWeekDisabled' => [0, 6], // ปิดใช้งานวันอาทิตย์ (0 = อาทิตย์, 1 = จันทร์, ..., 6 = เสาร์)
+                    ]
+                ]
+            ); ?>
+            <?= $form->field($model, 'broken_date')->widget(
+                DatePicker::class,
+                [
+                    'options' => [
+                        'required' => true,
+                    ],
+                    'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                        'todayHighlight' => true,
+                        'autoclose' => true,
+                        'timezone' => 'Asia/Bangkok', // Set Bangkok timezone
+                        'orientation' => 'bottom', // เลื่อนลงด้านล่าง
+                        'todayBtn' => "linked",
+                        // 'startDate' => date('Y-m-d', strtotime('+0 days')), // ไม่ให้เลือกวันที่ก่อนหน้าวันปัจจุบัน
+                        // 'daysOfWeekDisabled' => [0, 6], // ปิดใช้งานวันอาทิตย์ (0 = อาทิตย์, 1 = จันทร์, ..., 6 = เสาร์)
+                    ]
+                ]
+            ); ?>
             <?= $form->field($model, 'location')->widget(Select2::class, [
                 'data' => ArrayHelper::map(
                     Location::find()->all(),

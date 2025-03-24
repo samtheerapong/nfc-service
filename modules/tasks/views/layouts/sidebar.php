@@ -15,7 +15,6 @@ $users = !$isGuest && $employeeId;
     <div class="sidebar">
         <nav class="mt-2 nav-flat nav-compact">
             <?= \hail812\adminlte\widgets\Menu::widget([
-
                 'items' => [
                     ['visible' => $users, 'label' => Yii::t('app', 'Home'), 'url' => ['/site/index'], 'iconStyle' => 'bx', 'icon' => 'bx bxs-home text-success'],
                     ['label' => Yii::t('app', 'User'), 'header' => true, 'options' => ['style' => 'color: yellow;']],
@@ -33,7 +32,8 @@ $users = !$isGuest && $employeeId;
                     ['label' => ' ', 'header' => true, 'options' => ['style' => 'color: yellow;']],
                     // ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index'], 'iconStyle' => 'fa', 'icon' => 'fa-solid fa-home', 'options' => ['style' => 'font-size: small;']],ฃ
                 ]
-            ]); ?>
+            ]);
+            ?>
         </nav>
     </div>
 </aside>
