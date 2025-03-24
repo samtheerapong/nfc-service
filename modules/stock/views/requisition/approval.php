@@ -1,38 +1,31 @@
 <?php
 
 use app\components\StaticHelper;
-use yii\helpers\Html;
+use app\modules\stock\models\RequisitionStatus;
 use kartik\grid\GridView;
-
-/* @var $this yii\web\View */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
-
+use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 
 $this->title = 'รายการขอเบิก';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-
 <div class="request-index">
-    <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+    <div style="display: flex; justify-content: space-between;">
         <p>
             <?= Html::a('<i class="fas fa-home"></i> ' . Yii::t('app', 'Home'), ['index'], ['class' => 'btn btn-primary']) ?>
             <?= Html::a('<i class="fa fa-circle-plus text-yellow"></i> ' . Yii::t('app', 'สร้างคำขอเบิก'), ['create'], ['class' => 'btn btn-danger']) ?>
         </p>
         <p style="text-align: right;">
-            <?= Html::a('<i class="fa fa-refresh"></i>', ['index'], [
-                'class' => 'btn btn-warning btn-sm',
-                'title' => Yii::t('app', 'Refresh'),
-                'data-toggle' => 'tooltip'
-            ]) ?>
+            <?= Html::a('<i class="fa fa-refresh"></i>', ['index'], ['class' => 'btn btn-warning btn-sm', 'title' => Yii::t('app', 'Refresh'), 'data-toggle' => 'tooltip']) ?>
         </p>
     </div>
 
     <div class="card border-secondary">
         <div class="card-header text-white bg-secondary">
-            <?= Html::encode($this->title) ?>
+            <?= $this->title; ?>
         </div>
-        <div class="card-body">
+        <div class="card-body table-responsive">
+
+
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
@@ -84,11 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return '<span class="badge badge-danger">' . $statusName . '</span>';
                             }
                         },
-                        'filter' => \yii\helpers\ArrayHelper::map(
-                            \app\modules\stock\models\RequisitionStatus::find()->all(),
-                            'id',
-                            'name'
-                        ),
+                        'filter' => ArrayHelper::map(RequisitionStatus::find()->all(), 'id', 'name'),
                     ],
                     [
                         'class' => 'kartik\grid\ActionColumn',
@@ -96,20 +85,20 @@ $this->params['breadcrumbs'][] = $this->title;
                         'headerOptions' => ['style' => 'width:250px;'],
                         'contentOptions' => ['class' => 'text-center'],
                         'buttonOptions' => ['class' => 'btn btn-outline-dark btn-sm'],
-                        'template' => '<div class="btn-group" role="group"> {update} {cancel}</div>',
+                        'template' => '<div class="btn-group" role="group"> {approve} {reject}</div>',
                         'buttons' => [
-                            'update' => function ($url, $model) {
-                                if ($model->status_id == 1) {
-                                    return Html::a('ปรับปรุง', ['update', 'id' => $model->id], [
-                                        'class' => 'btn btn-sm btn-warning',
+                            'approve' => function ($url, $model) {
+                                if (in_array($model->status_id, [1, 3])) {
+                                    return Html::a('อนุมัติ', ['approve', 'id' => $model->id], [
+                                        'class' => 'btn btn-xs btn-success',
                                     ]);
                                 }
                                 return '';
                             },
-                            'cancel' => function ($url, $model) {
+                            'reject' => function ($url, $model) {
                                 if ($model->status_id == 1) {
-                                    return Html::a('ยกเลิก', ['cancel', 'id' => $model->id], [
-                                        'class' => 'btn btn-sm btn-danger',
+                                    return Html::a('ปฏิเสธ', ['reject', 'id' => $model->id], [
+                                        'class' => 'btn btn-xs btn-danger',
                                         'data' => [
                                             'confirm' => 'ยืนยันการยกเลิกคำขอนี้?',
                                             'method' => 'post',
@@ -124,18 +113,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
 
             ]) ?>
+
+
         </div>
     </div>
 </div>
-
-<?php
-$this->registerCss('
-    .request-index .card-body {
-        padding: 0;
-    }
-    .btn-sm {
-        padding: 4px 8px;
-        font-size: 12px;
-    }
-');
-?>

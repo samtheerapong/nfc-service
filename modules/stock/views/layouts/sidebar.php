@@ -16,10 +16,16 @@ $users = !$isGuest && $employeeId;
         <nav class="mt-2 nav-flat nav-compact">
             <?= \hail812\adminlte\widgets\Menu::widget([
                 'items' => [
-                    ['label' => 'อุปกรณ์', 'url' => ['/stock/equipment/index']],
-                    ['label' => 'การขอเบิก', 'url' => ['/stock/requisition/index']],
+                    ['label' => Yii::t('app', 'User'), 'header' => true, 'options' => ['style' => 'color: yellow;']],
+                    ['label' => 'ขอเบิก', 'url' => ['/stock/requisition/index']],
+                    ['label' => Yii::t('app', 'Approval'), 'header' => true, 'options' => ['style' => 'color: yellow;']],
+                    ['label' => 'อนุมัติการเบิก', 'url' => ['/stock/requisition/approval']],
+                    ['label' => Yii::t('app', 'Admininstrator'), 'header' => true, 'options' => ['style' => 'color: yellow;']],
                     ['label' => 'การสั่งซื้อ', 'url' => ['/stock/purchase-order/index']],
+                    ['label' => 'สรุปความต้องการสั่งซื้อ', 'url' => ['/stock/purchase-order/report']],
                     ['label' => 'สรุป', 'url' => ['/stock/purchase-order/summary']],
+                    ['label' => 'อุปกรณ์', 'url' => ['/stock/equipment/index']],
+                    ['label' => 'จัดการสต็อก', 'url' => ['/stock/purchase-order/manage-stock']],
                 ],
             ]);
             ?>
