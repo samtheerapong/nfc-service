@@ -29,8 +29,8 @@ use yii\helpers\Url;
         ]
     ]);
     ?>
-    <div class="card border-secondary">
-        <div class="card-header text-white bg-secondary">
+    <div class="card">
+        <div class="card-header text-white bg-danger">
             <?= Html::encode($this->title) ?>
         </div>
 

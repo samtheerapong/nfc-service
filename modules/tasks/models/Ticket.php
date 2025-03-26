@@ -39,7 +39,7 @@ class Ticket extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'ticket_group' => Yii::t('app', 'กลุ่มงาน'),
+            'ticket_group' => Yii::t('app', 'แจ้งไปยัง'),
             'ticket_code' => Yii::t('app', 'รหัส'),
             'ticket_date' => Yii::t('app', 'วันที่ต้องการ'),
             'broken_date' => Yii::t('app', 'วันที่เสีย'),

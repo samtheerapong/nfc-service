@@ -35,14 +35,14 @@ class Requisition extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'equipment_id' => Yii::t('app', 'Equipment ID'),
-            'user_name' => Yii::t('app', 'User Name'),
-            'quantity' => Yii::t('app', 'Quantity'),
-            'status_id' => Yii::t('app', 'Status'),
-            'created_at' => Yii::t('app', 'Created At'),
-            'approved_by' => Yii::t('app', 'Approved By'),
-            'approved_at' => Yii::t('app', 'Approved At'),
+            'id' => 'ID',
+            'equipment_id' => 'อุปกรณ์',
+            'user_name' => 'ผู้ขอเบิก',
+            'quantity' => 'จำนวน',
+            'status_id' => 'สถานะ',
+            'created_at' => 'เบิกเมื่อ',
+            'approved_by' => 'ผู้อนุมัติ',
+            'approved_at' => 'อนุญาตเมื่อ',
         ];
     }
  

@@ -16,15 +16,19 @@ $users = !$isGuest && $employeeId;
         <nav class="mt-2 nav-flat nav-compact">
             <?= \hail812\adminlte\widgets\Menu::widget([
                 'items' => [
-                    ['visible' => $users, 'label' => Yii::t('app', 'Home'), 'url' => ['/site/index'], 'iconStyle' => 'bx', 'icon' => 'bx bxs-home text-success'],
+                    ['visible' => $users, 'label' => Yii::t('app', 'Home'), 'url' => ['/site/index'], 'iconStyle' => 'fa', 'icon' => 'fa fa-home text-success'],
                     ['label' => Yii::t('app', 'User'), 'header' => true, 'options' => ['style' => 'color: yellow;']],
-                    ['label' => Yii::t('app', 'แจ้งงาน'), 'url' => ['/tasks/ticket/create'], 'iconStyle' => 'fa', 'icon' => 'fa-solid fa-wrench'],
-                    ['label' => Yii::t('app', 'รายการแจ้งของแผนก'), 'url' => ['/tasks/ticket/index'], 'iconStyle' => 'fa', 'icon' => 'fa-regular fa-rectangle-list'],
-                    ['label' => Yii::t('app', 'รายการรออนุมัติ'), 'url' => ['/tasks/ticket/approve-dep'], 'iconStyle' => 'fa', 'icon' => 'fa-regular fa-rectangle-list'],
-                    ['label' => Yii::t('app', 'รายการซ่อม'), 'url' => ['/tasks/ticket/in-progress'], 'iconStyle' => 'fa', 'icon' => 'fa-regular fa-rectangle-list'],
-                    ['label' => Yii::t('app', 'รายการเสร็จ'), 'url' => ['/tasks/ticket/successfully'], 'iconStyle' => 'fa', 'icon' => 'fa-regular fa-rectangle-list'],
+                    ['label' => Yii::t('app', 'เพิ่มการแจ้งซ่อม'), 'url' => ['/tasks/ticket/create'], 'iconStyle' => 'fa', 'icon' => 'fa-solid fa-triangle-exclamation'],
+                    ['label' => Yii::t('app', 'รายการแจ้งซ่อม'), 'url' => ['/tasks/ticket/index'], 'iconStyle' => 'fa', 'icon' => 'fa-regular fa-list'],
 
-                    ['label' => Yii::t('app', 'Administrator'), 'header' => true, 'options' => ['style' => 'color: yellow;']],
+                    ['label' => Yii::t('app', 'Header'), 'header' => true, 'options' => ['style' => 'color: yellow;']],
+                    ['label' => Yii::t('app', 'รายการรออนุมัติ'), 'url' => ['/tasks/ticket/index-super'], 'iconStyle' => 'fa', 'icon' => 'fa-solid fa-hourglass-half'],
+                    
+                    ['label' => Yii::t('app', 'Engineer'), 'header' => true, 'options' => ['style' => 'color: yellow;']],
+                    ['label' => Yii::t('app', 'รายการรอซ่อม'), 'url' => ['/tasks/ticket/index-process'], 'iconStyle' => 'fa', 'icon' => 'fa-solid fa-screwdriver-wrench'],
+                    ['label' => Yii::t('app', 'รายการงานสิ้นสุด'), 'url' => ['/tasks/ticket/index-complete'], 'iconStyle' => 'fa', 'icon' => 'fa-solid fa-thumbs-up'],
+
+                    ['label' => Yii::t('app', 'Config'), 'header' => true, 'options' => ['style' => 'color: yellow;']],
                     ['label' => Yii::t('app', 'การอนุมัติ'), 'url' => ['/equipment/orders/approve-index'], 'iconStyle' => 'fa', 'icon' => 'fa-regular fa-square-check'],
                     ['label' => Yii::t('app', 'รายการเบิกทั้งหมด'), 'url' => ['/equipment/orders/index'], 'iconStyle' => 'fa', 'icon' => 'fa-regular fa-rectangle-list'],
                     ['label' => Yii::t('app', 'สต๊อคอุปกรณ์'), 'url' => ['/equipment/items/index'], 'iconStyle' => 'fa', 'icon' => 'fa-solid fa-cubes'],

@@ -3,6 +3,7 @@
 namespace app\modules\stock\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "equipment".
@@ -84,5 +85,5 @@ class Equipment extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Requisition::class, ['equipment_id' => 'id']);
     }
-
+ 
 }

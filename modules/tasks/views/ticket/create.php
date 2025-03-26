@@ -1,28 +1,13 @@
 <?php
 
 use yii\helpers\Html;
-
-/** @var yii\web\View $this */
-/** @var app\modules\ticket\models\ticket $model */
-
-$this->title = Yii::t('app', 'Create Ticket');
+ 
+$this->title = Yii::t('app', 'เพิ่มการแจ้งซ่อม');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Tickets'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ticket-create">
-
-    <p>
-        <?= Html::button(
-            '<i class="fas fa-circle-left"></i> ' . Yii::t('app', 'Go Back'),
-            [
-                'class' => 'btn btn-primary',
-                'onclick' => 'window.history.back();',
-                'aria-label' => Yii::t('app', 'Go Back')
-            ]
-        ) ?>
-
-    </p>
-
+    <p><?= Html::a('<i class="fa-solid fa-home"></i> ' . Yii::t('app', 'Home'), ['index'], ['class' => 'btn btn-primary btn-sm btn-w100']) ?></p>
     <?= $this->render('_form', [
         'model' => $model,
         'initialPreview' => [],

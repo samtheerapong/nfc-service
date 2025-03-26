@@ -25,7 +25,7 @@ $users = !$isGuest && $employeeId;
                     ['label' => 'สรุปความต้องการสั่งซื้อ', 'url' => ['/stock/purchase-order/report']],
                     ['label' => 'สรุป', 'url' => ['/stock/purchase-order/summary']],
                     ['label' => 'อุปกรณ์', 'url' => ['/stock/equipment/index']],
-                    ['label' => 'จัดการสต็อก', 'url' => ['/stock/purchase-order/manage-stock']],
+                    ['label' => 'จัดการสต็อก', 'url' => ['/stock/purchase-order/manage-stock']], 
                 ],
             ]);
             ?>

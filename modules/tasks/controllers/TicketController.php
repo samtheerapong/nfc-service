@@ -17,6 +17,8 @@ use Exception;
 use kartik\mpdf\Pdf;
 use Mpdf\Config\ConfigVariables;
 use Mpdf\Config\FontVariables;
+use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
@@ -35,6 +37,16 @@ class TicketController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
+                'access' => [
+                    'class' => AccessControl::class,
+                    // 'only' => ['create', 'update', 'delete', 'view', 'index'],
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                    ],
+                ],
             ]
         );
     }
@@ -42,7 +54,12 @@ class TicketController extends Controller
     public function actionIndex()
     {
         $searchModel = new TicketSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => TicketSearch::find()->where(['status_id' => [1]]),
+            'pagination' => [
+                'pageSize' => 100,
+            ],
+        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -50,12 +67,52 @@ class TicketController extends Controller
         ]);
     }
 
-    public function actionIndexD()
+    public function actionIndexSuper()
     {
         $searchModel = new TicketSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        // $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => TicketSearch::find()->where(['status_id' => [1]]),
+            'pagination' => [
+                'pageSize' => 100,
+            ],
+        ]);
 
-        return $this->render('index', [
+        return $this->render('index-super', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionIndexProcess()
+    {
+        $searchModel = new TicketSearch();
+        // $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => TicketSearch::find()->where(['status_id' => [2]]),
+            'pagination' => [
+                'pageSize' => 100,
+            ],
+        ]);
+
+        return $this->render('index-process', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionIndexComplete()
+    {
+        $searchModel = new TicketSearch();
+        // $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => TicketSearch::find()->where(['status_id' => [5, 6, 7]]),
+            'pagination' => [
+                'pageSize' => 100,
+            ],
+        ]);
+
+        return $this->render('index-complete', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -104,6 +161,28 @@ class TicketController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+        ]);
+    }
+
+    public function actionApproval($id)
+    {
+        $model = $this->findModel($id);
+
+        $today = date("Y-m-d");
+        $identity = Yii::$app->user->identity ?: 'Anonymous';
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $model->approve_name = $identity->thai_name;
+            $model->approve_date =  $today;
+            $model->status_id = 2;
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Success'));
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+
+        return $this->render('approval', [
+            'model' => $model,
+
         ]);
     }
 
@@ -208,67 +287,68 @@ class TicketController extends Controller
     }
 
 
+    // public function actionAddItems()
+    // {
+    //     $model = new Ticket();
+    //     $modelsList = [new TicketList()];
+
+    //     if ($this->request->isPost) {
+    //         if ($model->load($this->request->post())) {
+
+    //             $model->ticket_code = AutoNumber::generate('TK-' . (date('y') + 43) . date('m') . '-????'); // Auto Number
+
+    //             $modelsList = Model::createMultiple(TicketList::class);
+    //             Model::loadMultiple($modelsList, Yii::$app->request->post());
+
+    //             // ajax validation
+    //             if (Yii::$app->request->isAjax) {
+    //                 Yii::$app->response->format = Response::FORMAT_JSON;
+    //                 return ArrayHelper::merge(
+    //                     ActiveForm::validateMultiple($modelsList),
+    //                     ActiveForm::validate($model)
+    //                 );
+    //             }
+    //             $valid = $model->validate();
+    //             $valid = Model::validateMultiple($modelsList) && $valid;
 
 
-    public function actionAddItems()
-    {
-        $model = new Ticket();
-        $modelsList = [new TicketList()];
+    //             if ($model->save()) {
+    //                 if ($valid) {
+    //                     $transaction = \Yii::$app->db->beginTransaction();
+    //                     try {
+    //                         if ($flag = $model->save(false)) {
+    //                             foreach ($modelsList as $i => $modelList) {
+    //                                 $modelList->ticket_code = $model->ticket_code;
+    //                                 if (!($flag = $modelList->save(false))) {
+    //                                     $transaction->rollBack();
+    //                                     break;
+    //                                 }
+    //                             }
+    //                         }
+    //                         if ($flag) {
+    //                             $transaction->commit();
+    //                             return $this->redirect(['view', 'id' => $model->id]);
+    //                         }
+    //                     } catch (Exception $e) {
+    //                         $transaction->rollBack();
+    //                     }
+    //                 }
+    //                 Yii::$app->session->setFlash('success', Yii::t('app', 'Success'));
+    //                 return $this->redirect(['view', 'id' => $model->id]);
+    //             }
+    //         }
+    //     } else {
+    //         $model->loadDefaultValues();
+    //     }
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post())) {
-
-                $model->ticket_code = AutoNumber::generate('TK-' . (date('y') + 43) . date('m') . '-????'); // Auto Number
-
-                $modelsList = Model::createMultiple(TicketList::class);
-                Model::loadMultiple($modelsList, Yii::$app->request->post());
-
-                // ajax validation
-                if (Yii::$app->request->isAjax) {
-                    Yii::$app->response->format = Response::FORMAT_JSON;
-                    return ArrayHelper::merge(
-                        ActiveForm::validateMultiple($modelsList),
-                        ActiveForm::validate($model)
-                    );
-                }
-                $valid = $model->validate();
-                $valid = Model::validateMultiple($modelsList) && $valid;
+    //     return $this->render('_form_details.php', [
+    //         'model' => $model,
+    //         'modelsList' => (empty($modelsList)) ? [new TicketList] : $modelsList
+    //     ]);
+    // }
 
 
-                if ($model->save()) {
-                    if ($valid) {
-                        $transaction = \Yii::$app->db->beginTransaction();
-                        try {
-                            if ($flag = $model->save(false)) {
-                                foreach ($modelsList as $i => $modelList) {
-                                    $modelList->ticket_code = $model->ticket_code;
-                                    if (!($flag = $modelList->save(false))) {
-                                        $transaction->rollBack();
-                                        break;
-                                    }
-                                }
-                            }
-                            if ($flag) {
-                                $transaction->commit();
-                                return $this->redirect(['view', 'id' => $model->id]);
-                            }
-                        } catch (Exception $e) {
-                            $transaction->rollBack();
-                        }
-                    }
-                    Yii::$app->session->setFlash('success', Yii::t('app', 'Success'));
-                    return $this->redirect(['view', 'id' => $model->id]);
-                }
-            }
-        } else {
-            $model->loadDefaultValues();
-        }
 
-        return $this->render('_form_details.php', [
-            'model' => $model,
-            'modelsList' => (empty($modelsList)) ? [new TicketList] : $modelsList
-        ]);
-    }
 
     /****** PDF ****** */
     public function actionExportDocument($id)

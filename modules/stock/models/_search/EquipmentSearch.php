@@ -4,12 +4,12 @@ namespace app\modules\stock\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\stock\models\Requisition;
+use app\modules\stock\models\Equipment;
 
 /**
- * RequisitionSearch represents the model behind the search form of `app\modules\stock\models\Requisition`.
+ * EquipmentSearch represents the model behind the search form of `app\modules\stock\models\Equipment`.
  */
-class RequisitionSearch extends Requisition
+class EquipmentSearch extends Equipment
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class RequisitionSearch extends Requisition
     public function rules()
     {
         return [
-            [['id', 'equipment_id', 'quantity', 'status_id'], 'integer'],
-            [['user_name', 'created_at', 'approved_by', 'approved_at'], 'safe'],
+            [['id', 'stock', 'low_stock_level'], 'integer'],
+            [['name', 'created_at'], 'safe'],
         ];
     }
 
@@ -41,18 +41,12 @@ class RequisitionSearch extends Requisition
      */
     public function search($params, $formName = null)
     {
-        $query = Requisition::find();
+        $query = Equipment::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => [
-                'pageSize' => 20, // จำกัด 20 รายการต่อหน้า
-            ],
-            'sort' => [
-                'defaultOrder' => ['id' => SORT_DESC],
-            ],
         ]);
 
         $this->load($params, $formName);
@@ -66,15 +60,12 @@ class RequisitionSearch extends Requisition
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'equipment_id' => $this->equipment_id,
-            'quantity' => $this->quantity,
+            'stock' => $this->stock,
+            'low_stock_level' => $this->low_stock_level,
             'created_at' => $this->created_at,
-            'approved_at' => $this->approved_at,
-            'status_id' => $this->status_id,
         ]);
 
-        $query->andFilterWhere(['like', 'user_name', $this->user_name])
-            ->andFilterWhere(['like', 'approved_by', $this->approved_by]);
+        $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }

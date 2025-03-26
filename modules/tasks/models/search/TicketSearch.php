@@ -50,6 +50,9 @@ class TicketSearch extends ticket
             'pagination' => [
                 'pageSize' => 16,
             ],
+            'sort' => [
+                'defaultOrder' => ['id' => SORT_DESC],
+            ],
         ]);
 
         $this->load($params, $formName);

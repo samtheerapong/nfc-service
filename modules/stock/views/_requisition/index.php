@@ -3,30 +3,33 @@
 use app\components\StaticHelper;
 use app\modules\stock\models\Equipment;
 use app\modules\stock\models\RequisitionStatus;
-use kartik\grid\GridView;
-use kartik\widgets\Select2;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use kartik\grid\GridView;
+use yii\helpers\ArrayHelper;
 
 $this->title = 'รายการขอเบิก';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="approve-index">
+<div class="request-index">
     <div style="display: flex; justify-content: space-between;">
         <p>
-            <?= Html::a('<i class="fas fa-home"></i> ' . Yii::t('app', 'Home'), ['index'], ['class' => 'btn btn-primary btn-sm']) ?>
+            <?= Html::a('<i class="fas fa-home"></i> ' . Yii::t('app', 'Home'), ['index'], ['class' => 'btn btn-primary  btn-sm']) ?>
             <?= Html::a('<i class="fa fa-circle-plus text-yellow"></i> ' . Yii::t('app', 'สร้างคำขอเบิก'), ['create'], ['class' => 'btn btn-danger btn-sm']) ?>
         </p>
         <p style="text-align: right;">
-            <?= Html::a('<i class="fa fa-refresh"></i>', ['index'], ['class' => 'btn btn-warning btn-sm', 'title' => Yii::t('app', 'Refresh'), 'data-toggle' => 'tooltip']) ?>
+            <?= Html::a('<i class="fa fa-refresh"></i>', ['index'], [
+                'class' => 'btn btn-warning btn-sm',
+                'title' => Yii::t('app', 'Refresh'),
+                'data-toggle' => 'tooltip'
+            ]) ?>
         </p>
     </div>
 
-    <div class="card">
-        <div class="card-header text-white bg-success">
-            <?= $this->title; ?>
+    <div class="card border-secondary">
+        <div class="card-header text-white bg-secondary">
+            <?= Html::encode($this->title) ?>
         </div>
-        <div class="card-body table-responsive">
+        <div class="card-body">
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
@@ -40,15 +43,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value' => function ($model) {
                             return $model->equipment ? Html::encode($model->equipment->name) : '-';
                         },
-                        'filter' => Select2::widget([
-                            'model' => $searchModel,
-                            'attribute' => 'equipment_id',
-                            'data' => ArrayHelper::map(Equipment::find()->where(['>', 'stock', 0])->all(), 'id', 'name'),
-                            'options' => ['placeholder' => Yii::t('app', 'Select...')],
-                            'pluginOptions' => [
-                                'allowClear' => true
-                            ],
-                        ])
+                        'filter' => ArrayHelper::map(
+                            Equipment::find()->all(),
+                            'id',
+                            'name'
+                        ),
                     ],
                     [
                         'attribute' => 'user_name',
@@ -76,15 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return '<span class="badge badge-danger">' . $statusName . '</span>';
                             }
                         },
-                        'filter' => Select2::widget([
-                            'model' => $searchModel,
-                            'attribute' => 'status_id',
-                            'data' => ArrayHelper::map(RequisitionStatus::find()->where(['is_active' => 1])->all(), 'id', 'name'),
-                            'options' => ['placeholder' => Yii::t('app', 'Select...')],
-                            'pluginOptions' => [
-                                'allowClear' => true
-                            ],
-                        ])
+                        'filter' => ArrayHelper::map(RequisitionStatus::find()->all(), 'id', 'name'),
                     ],
                     [
                         'class' => 'kartik\grid\ActionColumn',
@@ -92,20 +83,20 @@ $this->params['breadcrumbs'][] = $this->title;
                         'headerOptions' => ['style' => 'width:250px;'],
                         'contentOptions' => ['class' => 'text-center'],
                         'buttonOptions' => ['class' => 'btn btn-outline-dark btn-sm'],
-                        'template' => '<div class="btn-group" role="group"> {approve} {reject}</div>',
+                        'template' => '<div class="btn-group" role="group"> {update} {cancel}</div>',
                         'buttons' => [
-                            'approve' => function ($url, $model) {
-                                if (in_array($model->status_id, [1, 3])) {
-                                    return Html::a('อนุมัติ', ['approve', 'id' => $model->id], [
-                                        'class' => 'btn btn-xs btn-success',
+                            'update' => function ($url, $model) {
+                                if ($model->status_id == 1) {
+                                    return Html::a('ปรับปรุง', ['update', 'id' => $model->id], [
+                                        'class' => 'btn btn-sm btn-warning',
                                     ]);
                                 }
                                 return '';
                             },
-                            'reject' => function ($url, $model) {
+                            'cancel' => function ($url, $model) {
                                 if ($model->status_id == 1) {
-                                    return Html::a('ปฏิเสธ', ['reject', 'id' => $model->id], [
-                                        'class' => 'btn btn-xs btn-danger',
+                                    return Html::a('ยกเลิก', ['cancel', 'id' => $model->id], [
+                                        'class' => 'btn btn-sm btn-danger',
                                         'data' => [
                                             'confirm' => 'ยืนยันการยกเลิกคำขอนี้?',
                                             'method' => 'post',
@@ -120,7 +111,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
 
             ]) ?>
-
         </div>
     </div>
 </div>

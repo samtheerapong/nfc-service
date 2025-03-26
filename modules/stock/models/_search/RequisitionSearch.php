@@ -47,12 +47,6 @@ class RequisitionSearch extends Requisition
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => [
-                'pageSize' => 20, // จำกัด 20 รายการต่อหน้า
-            ],
-            'sort' => [
-                'defaultOrder' => ['id' => SORT_DESC],
-            ],
         ]);
 
         $this->load($params, $formName);

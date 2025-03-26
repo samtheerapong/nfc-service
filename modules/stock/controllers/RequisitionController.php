@@ -2,27 +2,45 @@
 
 namespace app\modules\stock\controllers;
 
-use Yii;
 use app\modules\stock\models\Requisition;
-use app\modules\stock\models\Equipment;
 use app\modules\stock\models\search\RequisitionSearch;
-use yii\data\ActiveDataProvider;
+use Yii;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
 
+/**
+ * RequisitionController implements the CRUD actions for Requisition model.
+ */
 class RequisitionController extends Controller
 {
+    /**
+     * @inheritDoc
+     */
+    public function behaviors()
+    {
+        return array_merge(
+            parent::behaviors(),
+            [
+                'verbs' => [
+                    'class' => VerbFilter::class,
+                    'actions' => [
+                        'delete' => ['POST'],
+                    ],
+                ],
+            ]
+        );
+    }
+
+    /**
+     * Lists all Requisition models.
+     *
+     * @return string
+     */
     public function actionIndex()
     {
         $searchModel = new RequisitionSearch();
-        $dataProvider = new ActiveDataProvider([
-            'query' => Requisition::find()->with('equipment'),
-            'pagination' => [
-                'pageSize' => 20, // จำกัด 20 รายการต่อหน้า
-            ],
-            'sort' => [
-                'defaultOrder' => ['created_at' => SORT_DESC],
-            ],
-        ]);
+        $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -30,106 +48,88 @@ class RequisitionController extends Controller
         ]);
     }
 
-    public function actionApproval()
+    /**
+     * Displays a single Requisition model.
+     * @param int $id ID
+     * @return string
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionView($id)
     {
-        $searchModel = new RequisitionSearch();
-        $dataProvider = new ActiveDataProvider([
-            'query' => Requisition::find()->with('equipment'),
-            'pagination' => [
-                'pageSize' => 20, // จำกัด 20 รายการต่อหน้า
-            ],
-            'sort' => [
-                'defaultOrder' => ['created_at' => SORT_DESC],
-            ],
-        ]);
-
-        return $this->render('approval', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+        return $this->render('view', [
+            'model' => $this->findModel($id),
         ]);
     }
 
+    /**
+     * Creates a new Requisition model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return string|\yii\web\Response
+     */
     public function actionCreate()
     {
         $model = new Requisition();
-        $equipments = Equipment::find()->all();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $equipment = Equipment::findOne($model->equipment_id);
-            if ($equipment->stock >= $model->quantity) {
-                if ($model->save()) {
-                    // อัพเดทสต็อก
-                    $equipment->stock -= $model->quantity;
-                    $equipment->save();
-                    return $this->redirect(['index']);
-                }
-            } else {
-                Yii::$app->session->setFlash('error', 'สต็อกไม่เพียงพอ');
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
             }
+        } else {
+            $model->loadDefaultValues();
         }
 
         return $this->render('create', [
             'model' => $model,
-            'equipments' => $equipments,
         ]);
     }
 
-
-    public function actionApprove($id)
+    /**
+     * Updates an existing Requisition model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param int $id ID
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionUpdate($id)
     {
-        $model = Requisition::findOne($id);
-        if ($model) {
-            $equipment = Equipment::findOne($model->equipment_id);
-            if ($equipment->stock >= $model->quantity) {
-                $model->status_id = 2;
-                $model->approved_by = 'Admin'; // ควรเปลี่ยนเป็นระบบ user จริง
-                $model->approved_at = date('Y-m-d H:i:s');
+        $model = $this->findModel($id);
 
-                if ($model->save()) {
-                    $equipment->stock -= $model->quantity;
-                    $equipment->save();
-                    Yii::$app->session->setFlash('success', 'อนุมัติคำขอเรียบร้อย');
-                }
-            } else {
-                Yii::$app->session->setFlash('error', 'สต็อกไม่เพียงพอ');
-            }
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
-        return $this->redirect(['approval']);
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
-
-
-    public function actionReject($id)
+    /**
+     * Deletes an existing Requisition model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param int $id ID
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    public function actionDelete($id)
     {
-        $model = Requisition::findOne($id);
-        if ($model) {
-            $model->status_id = 3;
-            $model->approved_by = 'Admin'; // ควรเปลี่ยนเป็นระบบ user จริง
-            $model->approved_at = date('Y-m-d H:i:s');
-            $model->save();
-            Yii::$app->session->setFlash('success', 'ปฏิเสธคำขอเรียบร้อย');
-        }
-        return $this->redirect(['approval']);
-    }
-
-    public function actionCancel($id)
-    {
-        $model = Requisition::findOne($id);
-        if (!$model) {
-            throw new \yii\web\NotFoundHttpException('ไม่พบคำขอที่ระบุ');
-        }
-
-        if ($model) {
-            $model->setStatusToCancel();
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'ยกเลิกคำขอเรียบร้อย');
-            } else {
-                Yii::$app->session->setFlash('error', 'ไม่สามารถยกเลิกได้: ' . implode(', ', $model->getFirstErrors()));
-            }
-        } else {
-            Yii::$app->session->setFlash('error', 'เฉพาะคำขอที่รออยู่เท่านั้นที่ยกเลิกได้');
-        }
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * Finds the Requisition model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param int $id ID
+     * @return Requisition the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Requisition::findOne(['id' => $id])) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 }

@@ -18,8 +18,18 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::a('<i class="fas fa-home"></i> ' . Yii::t('app', 'Home'), ['index'], ['class' => 'btn btn-primary btn-sm btn-w100']) ?>
         </div>
         <div class="btn-group-wrapper">
+            <?= Html::a('<i class="fas fa-check"></i> อนุมัติ', ['approval', 'id' => $model->id], [
+                'class' => 'btn btn-outline-success btn-sm btn-w100',
+                'style' => 'border-color: #666666',
+                'data' => [
+                    'confirm' => Yii::t('app', 'Are you sure you want to approve this item?'),
+                    'method' => 'post',
+                ],
+            ]) ?>
+            </p>
             <?= Html::a('<i class="fa-regular fa-file-pdf"></i> ใบแจ้งซ่อม', ['export-document', 'id' => $model->id], ['class' => 'btn btn-outline-primary btn-sm btn-w100', 'target' => '_blank',]) ?>
             <?= Html::a('<i class="fas fa-edit"></i> แก้ไข', ['update', 'id' => $model->id], ['class' => 'btn btn-outline-warning btn-sm btn-w100', 'style' => 'border-color: #666666;']) ?>
+
             <?= Html::a('<i class="fas fa-trash"></i> ลบ', ['delete', 'id' => $model->id], [
                 'class' => 'btn btn-outline-danger btn-sm btn-w100',
                 'style' => 'border-color: #666666',
@@ -67,10 +77,27 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $model->group ?  $model->group->name : '';
                                 },
                             ],
-
-                            'ticket_code',
-                            'ticket_date:date',
-                            'title',
+                            [
+                                'attribute' => 'ticket_code',
+                                'format' => 'raw',
+                                'value' => function ($model) {
+                                    return $model->ticket_code ?  '<strong>' . $model->ticket_code . '</strong>' : '';
+                                },
+                            ],
+                            [
+                                'attribute' => 'ticket_date',
+                                'format' => 'raw',
+                                'value' => function ($model) {
+                                    return $model->ticket_date ?  Yii::$app->thaiFormatter->asDate($model->ticket_date, 'long') : '';
+                                },
+                            ],
+                            [
+                                'attribute' => 'title',
+                                'format' => 'raw',
+                                'value' => function ($model) {
+                                    return $model->title ?  '<i>' . $model->title . '</i>' : '';
+                                },
+                            ],
                             !empty($model->description) ? [
                                 'attribute' => 'description',
                                 'format' => 'ntext',
@@ -102,7 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'approve_date',
                                 'format' => 'html',
                                 'value' => function ($model) {
-                                    $name = $model->approve_date ? $model->approve_date : '';
+                                    $name = $model->approve_date ? Yii::$app->thaiFormatter->asDate($model->approve_date, 'long') : '';
                                     return $name;
                                 },
                             ] : null,
@@ -114,9 +141,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $name;
                                 },
                             ] : null,
-
-
-
                         ]),
                     ]) ?>
 
