@@ -4,6 +4,7 @@ namespace app\modules\rawsauce\controllers;
 
 use app\modules\rawsauce\models\RawSauceLog;
 use app\modules\rawsauce\models\search\RawSauceLogSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -22,7 +23,7 @@ class RawSauceLogController extends Controller
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -69,9 +70,20 @@ class RawSauceLogController extends Controller
     {
         $model = new RawSauceLog();
 
+
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+
+                $model->ref_code = $model->autoNumber();
+ 
+                $model->current_value = $model->currentValue();
+
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', Yii::t('app', 'Success'));
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    Yii::$app->session->setFlash('error', Yii::t('app', 'Error'));
+                }
             }
         } else {
             $model->loadDefaultValues();

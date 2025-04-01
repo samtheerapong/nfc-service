@@ -3,6 +3,7 @@
 namespace app\modules\rawsauce\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "raw_sauce_log".
@@ -26,11 +27,22 @@ use Yii;
  */
 class RawSauceLog extends \yii\db\ActiveRecord
 {
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'attributes' => [
+                    self::EVENT_BEFORE_INSERT => ['updated_date'],
+                    self::EVENT_BEFORE_UPDATE => ['updated_date'],
+                ],
+                'value' => function () {
+                    return date('Y-m-d H:i:s');
+                },
+            ],
 
-
-    /**
-     * {@inheritdoc}
-     */
+        ];
+    }
     public static function tableName()
     {
         return 'raw_sauce_log';
@@ -100,5 +112,36 @@ class RawSauceLog extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Tanks::class, ['id' => 'tank_id']);
     }
+    /**
+     * Gets query for [[AutoNumber]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function autoNumber()
+    {
+        $tankName = $this->tank_id ?: 'TANK';
+        return AutoNumber::generate($tankName . (date('y')) . date('m') . '????');
+    }
 
+
+    public function currentValue()
+    {
+        // เริ่มต้นจาก 0 หาก current_value เป็น null
+        $current = $this->current_value ?? 0;
+
+        // ถ้ามี incoming_value ให้บวกเพิ่ม
+        if ($this->incoming_value !== null) {
+            $current += $this->incoming_value;
+        }
+
+        // ถ้ามี outgoing_value ให้ลบออก
+        if ($this->outgoing_value !== null) {
+            $current -= $this->outgoing_value;
+        }
+
+        // ตรวจสอบไม่ให้ติดลบ
+        $this->current_value = max(0, $current);
+
+        return $this->current_value;
+    }
 }
