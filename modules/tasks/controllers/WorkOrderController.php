@@ -2,8 +2,11 @@
 
 namespace app\modules\tasks\controllers;
 
+use app\modules\tasks\models\AutoNumber;
 use app\modules\tasks\models\WorkOrder;
 use app\modules\tasks\models\search\WorkOrderSearch;
+use app\modules\tasks\models\Ticket;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -78,6 +81,47 @@ class WorkOrderController extends Controller
         }
 
         return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionAddWorkOrder($ticket_id)
+    {
+        $model = new WorkOrder();
+        $modelTicket = Ticket::findOne(['id' => $ticket_id]);
+
+        if (!$modelTicket) {
+            throw new NotFoundHttpException(Yii::t('app', 'The requested ticket does not exist.'));
+        }
+
+        $dateNow = date('Y-m-d');
+
+        // Set default values for the WorkOrder model
+        $model->priority_id = $model->priority_id ?: 1;
+        $model->ticket_id = $ticket_id;
+        $model->start_date = $dateNow;
+        $model->end_date = $dateNow;
+        $model->hours = 0;
+        $model->cost = 0;
+
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $model->work_order_code = AutoNumber::generate('WO-' . (date('y') + 43) . date('m') . '-????'); // Generate Auto Number
+
+            if ($model->save()) {
+                // Update the ticket's status to "In Progress"
+                $modelTicket->status_id = 3; // In Progress
+                if ($modelTicket->save()) {
+                    Yii::$app->session->setFlash('success', Yii::t('app', 'Work order created and ticket status updated successfully.'));
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    Yii::$app->session->setFlash('error', Yii::t('app', 'Failed to update ticket status.'));
+                }
+            } else {
+                Yii::$app->session->setFlash('error', Yii::t('app', 'Failed to save work order.'));
+            }
+        }
+
+        return $this->render('add-work-order', [
             'model' => $model,
         ]);
     }
