@@ -8,6 +8,7 @@ $engineer = require __DIR__ . '/engineer.php';
 $dbit = require __DIR__ . '/dbit.php';
 $dbstock = require __DIR__ . '/dbstock.php';
 $dbrawsauce = require __DIR__ . '/dbrawsauce.php';
+$dbpm = require __DIR__ . '/dbpm.php';
 
 $config = [
     'id' =>  env('ID'),
@@ -41,6 +42,9 @@ $config = [
         ],
         'rawsauce' => [
             'class' => 'app\modules\rawsauce\Module',
+        ],
+        'maintenance' => [
+            'class' => 'app\modules\maintenance\Module',
         ],
     ],
     'components' => [
@@ -115,6 +119,7 @@ $config = [
         'dbit' => $dbit,
         'dbstock' => $dbstock,
         'rawsauce' => $dbrawsauce,
+        'dbpm' => $dbpm,
         'i18n' => [
             'translations' => [
                 'app*' => [
