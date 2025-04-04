@@ -18,6 +18,8 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Work Order');
 
     <?= $this->render('_add-work-order', [
         'model' => $model,
+        'initialPreview' => [],
+        'initialPreviewConfig' => []
     ]) ?>
 
 </div>

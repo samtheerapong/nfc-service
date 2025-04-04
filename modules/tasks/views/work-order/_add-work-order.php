@@ -8,6 +8,7 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\widgets\DatePicker;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 
 ?>
 
@@ -105,11 +106,39 @@ use yii\helpers\ArrayHelper;
 
             <?= $form->field($model, 'cost')->textInput(['maxlength' => true]) ?>
 
+            <div class="mb-3 row highlight-addon field-notify-unit">
+                <label class="col-form-label has-star col-md-3 text-md-right text-left"><?php echo Yii::t('app', 'Uploads') ?></label>
+                <div class="col-md-9">
+                    <?php echo \kartik\widgets\FileInput::widget([
+                        'name'          => 'upload_file[]',
+                        'options'       => [
+                            'multiple' => true,
+                            'accept' => '.jpg,.jpeg,.png,.pdf'
+                        ],
 
-            <div class="form-group">
-                <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+                        'pluginOptions' => [
+                            'initialPreview'           => $initialPreview,
+                            'initialPreviewConfig'     => $initialPreviewConfig,
+                            'uploadUrl'                => Url::to(['upload']),
+                            'uploadExtraData'          => ['ref' => $model->work_order_code],
+                            'maxFileCount'             => 5,
+                            'language'                 => 'th',
+                            'browseLabel'              => 'เลือกไฟล์...', // ใช้ browseLabel แทน placeholder
+                            'msgPlaceholder'           => 'เลือกไฟล์ได้สูงสุด 3 ไฟล์', // เพิ่ม msgPlaceholder สำหรับ kartik FileInput
+                        ],
+                    ]) ?>
+                </div>
             </div>
-
-            <?php ActiveForm::end(); ?>
-
         </div>
+
+        <div class="card-footer">
+            <div class="d-grid gap-2">
+                <?= Html::submitButton(
+                    '<i class="fas fa-save"></i> ' . Yii::t('app', 'Save'),
+                    ['class' => 'btn btn-success']
+                ) ?>
+            </div>
+        </div>
+    </div>
+    <?php ActiveForm::end(); ?>
+</div>

@@ -2,6 +2,7 @@
 
 namespace app\modules\tasks\controllers;
 
+use app\components\HandleUploads;
 use app\modules\tasks\models\AutoNumber;
 use app\modules\tasks\models\WorkOrder;
 use app\modules\tasks\models\search\WorkOrderSearch;
@@ -106,7 +107,7 @@ class WorkOrderController extends Controller
 
         if ($this->request->isPost && $model->load($this->request->post())) {
             $model->work_order_code = AutoNumber::generate('WO-' . (date('y') + 43) . date('m') . '-????'); // Generate Auto Number
-
+            $model->getUploads();
             if ($model->save()) {
                 // Update the ticket's status to "In Progress"
                 $modelTicket->status_id = 3; // In Progress
@@ -137,12 +138,56 @@ class WorkOrderController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        list($initialPreview, $initialPreviewConfig) = HandleUploads::getInitialPreview($model->work_order_code, WorkOrder::UPLOAD_FOLDER);
+
+        if ($this->request->isPost && $model->load($this->request->post())) {
+
+            $model->getUploads();
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', Yii::t('app', 'Success'));
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('update', [
             'model' => $model,
+            'initialPreview' => $initialPreview,
+            'initialPreviewConfig' => $initialPreviewConfig
+        ]);
+    }
+
+    public function actionApproval($id)
+    {
+        $model = $this->findModel($id);
+        $modelTicket = Ticket::findOne(['id' => $model->ticket_id]);
+
+        if (!$modelTicket) {
+            throw new NotFoundHttpException(Yii::t('app', 'The requested ticket does not exist.'));
+        }
+
+        $today = date("Y-m-d");
+        $identity = Yii::$app->user->identity ?: 'Anonymous';
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $model->approve_name = $identity->thai_name;
+            $model->approve_date =  $today;
+            if ($model->save()) {
+                // Update the ticket's status to "In Progress"
+                $modelTicket->status_id = 4; // Engineer Approved
+                if ($modelTicket->save()) {
+                    Yii::$app->session->setFlash('success', Yii::t('app', 'Work order created and ticket status updated successfully.'));
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    Yii::$app->session->setFlash('error', Yii::t('app', 'Failed to update ticket status.'));
+                }
+            } else {
+                Yii::$app->session->setFlash('error', Yii::t('app', 'Failed to save work order.'));
+            }
+        }
+
+        return $this->render('approval', [
+            'model' => $model,
+
         ]);
     }
 
