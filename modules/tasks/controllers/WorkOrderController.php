@@ -7,6 +7,7 @@ use app\modules\tasks\models\AutoNumber;
 use app\modules\tasks\models\WorkOrder;
 use app\modules\tasks\models\search\WorkOrderSearch;
 use app\modules\tasks\models\Ticket;
+use Exception;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
