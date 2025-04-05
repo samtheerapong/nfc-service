@@ -108,7 +108,7 @@ class WorkOrder extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getTeamwork0()
+    public function getTeam()
     {
         return $this->hasOne(Teams::class, ['id' => 'teamwork']);
     }

@@ -47,14 +47,11 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="card-body">
             <div class="row">
-
                 <div class="col-lg-9">
-
                     <?= DetailView::widget([
                         'model' => $model,
                         'template' => '<tr><th class="text-right" style="width: 1px; white-space: nowrap">{label} : </th><td> {value}</td></tr>',
                         'attributes' => array_filter([
-
                             'id',
                             'ticket_id',
                             'work_order_code',

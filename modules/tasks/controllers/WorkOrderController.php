@@ -8,13 +8,11 @@ use app\modules\tasks\models\WorkOrder;
 use app\modules\tasks\models\search\WorkOrderSearch;
 use app\modules\tasks\models\Ticket;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
-/**
- * WorkOrderController implements the CRUD actions for WorkOrder model.
- */
+ 
 class WorkOrderController extends Controller
 {
     /**
@@ -26,7 +24,7 @@ class WorkOrderController extends Controller
             parent::behaviors(),
             [
                 'verbs' => [
-                    'class' => VerbFilter::className(),
+                    'class' => VerbFilter::class,
                     'actions' => [
                         'delete' => ['POST'],
                     ],
@@ -34,41 +32,33 @@ class WorkOrderController extends Controller
             ]
         );
     }
-
-    /**
-     * Lists all WorkOrder models.
-     *
-     * @return string
-     */
+ 
     public function actionIndex()
     {
         $searchModel = new WorkOrderSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = new ActiveDataProvider([
+            'query' => WorkOrder::find(),
+            'pagination' => [
+                'pageSize' => 4,
+            ],
+            'sort' => [
+                'defaultOrder' => ['id' => SORT_DESC], // ล่าสุดก่อน
+            ],
+        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
-
-    /**
-     * Displays a single WorkOrder model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+ 
     public function actionView($id)
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
     }
-
-    /**
-     * Creates a new WorkOrder model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
+ 
     public function actionCreate()
     {
         $model = new WorkOrder();
@@ -126,14 +116,7 @@ class WorkOrderController extends Controller
             'model' => $model,
         ]);
     }
-
-    /**
-     * Updates an existing WorkOrder model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+ 
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -190,28 +173,14 @@ class WorkOrderController extends Controller
 
         ]);
     }
-
-    /**
-     * Deletes an existing WorkOrder model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+ 
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
-
-    /**
-     * Finds the WorkOrder model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return WorkOrder the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+ 
     protected function findModel($id)
     {
         if (($model = WorkOrder::findOne(['id' => $id])) !== null) {
