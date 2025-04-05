@@ -59,6 +59,9 @@ class TicketController extends Controller
             'pagination' => [
                 'pageSize' => 100,
             ],
+            'sort' => [
+                'defaultOrder' => ['id' => SORT_DESC], // ล่าสุดก่อน
+            ],
         ]);
 
         return $this->render('index', [
@@ -75,6 +78,9 @@ class TicketController extends Controller
             'query' => TicketSearch::find()->where(['status_id' => [1]]),
             'pagination' => [
                 'pageSize' => 100,
+            ],
+            'sort' => [
+                'defaultOrder' => ['id' => SORT_DESC], // ล่าสุดก่อน
             ],
         ]);
 
@@ -93,6 +99,9 @@ class TicketController extends Controller
             'pagination' => [
                 'pageSize' => 100,
             ],
+            'sort' => [
+                'defaultOrder' => ['id' => SORT_DESC], // ล่าสุดก่อน
+            ],
         ]);
 
         return $this->render('index-process', [
@@ -110,6 +119,9 @@ class TicketController extends Controller
             'pagination' => [
                 'pageSize' => 100,
             ],
+            'sort' => [
+                'defaultOrder' => ['id' => SORT_DESC], // ล่าสุดก่อน
+            ],
         ]);
 
         return $this->render('index-complete', [
@@ -117,7 +129,7 @@ class TicketController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
-
+ 
     public function actionView($id)
     {
         return $this->render('view', [
@@ -185,9 +197,7 @@ class TicketController extends Controller
 
         ]);
     }
-
-
-
+ 
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);

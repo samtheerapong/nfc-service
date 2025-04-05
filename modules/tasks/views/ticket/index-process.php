@@ -44,12 +44,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'onclick' => "Swal.fire({title: 'คุณต้องการปฏิเสธหรือไม่?', icon: 'warning', showCancelButton: true, confirmButtonText: 'ยืนยัน', cancelButtonText: 'ยกเลิก'})
                                             .then(result => { if (result.isConfirmed) window.location.href = '" . Yii::$app->urlManager->createUrl(['/tasks/ticket/canceled', 'id' => $model->id]) . "'; }); return false;"
                                         ]) ?>
-                                        <?= Html::a('<i class="fas fa-check"></i>', ['approval', 'id' => $model->id], [
-                                            'class' => 'btn btn-success',
-                                            'title' => 'อนุมัติ',
-                                            'style' => 'border-color: #666666',
-                                            'onclick' => "Swal.fire({title: 'คุณต้องการอนุมัติหรือไม่?', icon: 'warning', showCancelButton: true, confirmButtonText: 'ยืนยัน', cancelButtonText: 'ยกเลิก'})
-                                            .then(result => { if (result.isConfirmed) window.location.href = '" . Yii::$app->urlManager->createUrl(['/tasks/ticket/approval', 'id' => $model->id]) . "'; }); return false;"
+                                        <?= Html::a('<i class="fa-solid fa-screwdriver-wrench"></i>', ['/tasks/work-order/add-work-order', 'ticket_id' => $model->id], [
+                                            'class' => 'btn btn-warning',
+                                            'title' => 'สั่งซ่อม',
+                                            // 'style' => 'border-color: #666666',
+                                            'onclick' => "Swal.fire({title: 'คุณต้องการสั่งซ่อมหรือไม่?', icon: 'warning', showCancelButton: true, confirmButtonText: 'ยืนยัน', cancelButtonText: 'ยกเลิก'})
+                                            .then(result => { if (result.isConfirmed) window.location.href = '" . Yii::$app->urlManager->createUrl(['/tasks/work-order/add-work-order', 'ticket_id' => $model->id]) . "'; }); return false;"
                                         ]) ?>
                                         </p>
                                     </div>

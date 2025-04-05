@@ -2,7 +2,10 @@
 
 namespace app\modules\tasks\models;
 
+use app\components\HandleUploads;
+use app\models\Uploads;
 use Yii;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "work_order".
@@ -30,7 +33,7 @@ use Yii;
 class WorkOrder extends \yii\db\ActiveRecord
 {
 
-
+    const UPLOAD_FOLDER = 'uploads/works';
     /**
      * {@inheritdoc}
      */
@@ -105,7 +108,7 @@ class WorkOrder extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getTeamwork0()
+    public function getTeam()
     {
         return $this->hasOne(Teams::class, ['id' => 'teamwork']);
     }
@@ -130,4 +133,36 @@ class WorkOrder extends \yii\db\ActiveRecord
         return $this->hasOne(WorkType::class, ['id' => 'work_type_id']);
     }
 
+
+    // use HandleUploads from app\components\HandleUploads
+    public function getFirstShowImg()
+    {
+        return HandleUploads::getFirstShowImg($this->work_order_code, self::UPLOAD_FOLDER);
+    }
+
+    public function getShowAllImages()
+    {
+        return HandleUploads::getFirstShowImg($this->work_order_code, self::UPLOAD_FOLDER);
+    }
+
+    public function getShowImages()
+    {
+        return HandleUploads::getShowImage($this->work_order_code, self::UPLOAD_FOLDER);
+    }
+
+    public function getUploads($isAjax = false)
+    {
+        return HandleUploads::Uploader($this->work_order_code, $isAjax, self::UPLOAD_FOLDER);
+    }
+ 
+    public function getUploadedFiles()
+    {
+        return $this->hasMany(Uploads::class, ['ref' => 'work_order_code']);
+    }
+
+    public function getAvatar()
+    {
+        $imgUrl = HandleUploads::getFirstShowImg($this->work_order_code, self::UPLOAD_FOLDER);
+        return   $imgUrl ? Html::img($imgUrl, ['height' => '30px', 'class' => 'img-thumbnail text-center']) : '<span>No Image</span>';
+    }
 }
