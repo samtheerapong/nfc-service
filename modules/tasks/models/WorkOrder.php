@@ -67,6 +67,7 @@ class WorkOrder extends \yii\db\ActiveRecord
             [['teamwork'], 'exist', 'skipOnError' => true, 'targetClass' => Teams::class, 'targetAttribute' => ['teamwork' => 'id']],
             [['ticket_id'], 'exist', 'skipOnError' => true, 'targetClass' => Ticket::class, 'targetAttribute' => ['ticket_id' => 'id']],
             [['work_type_id'], 'exist', 'skipOnError' => true, 'targetClass' => WorkType::class, 'targetAttribute' => ['work_type_id' => 'id']],
+            [['ticket_id'], 'unique', 'message' => Yii::t('app', 'This ticket already has a work order.')],
         ];
     }
 

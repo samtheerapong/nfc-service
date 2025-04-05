@@ -6,12 +6,10 @@ use app\components\HandleUploads;
 use app\modules\tasks\models\ticket;
 use app\modules\tasks\models\Autonumber;
 use app\modules\tasks\models\search\TicketSearch;
-use app\modules\tasks\models\TicketList;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use app\models\Model;
 use app\models\Uploads;
 use Exception;
 use kartik\mpdf\Pdf;
@@ -19,9 +17,7 @@ use Mpdf\Config\ConfigVariables;
 use Mpdf\Config\FontVariables;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
-use yii\helpers\ArrayHelper;
-use yii\web\Response;
-use yii\widgets\ActiveForm;
+
 
 class TicketController extends Controller
 {
@@ -129,7 +125,7 @@ class TicketController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
- 
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -179,25 +175,34 @@ class TicketController extends Controller
     public function actionApproval($id)
     {
         $model = $this->findModel($id);
-
         $today = date("Y-m-d");
         $identity = Yii::$app->user->identity ?: 'Anonymous';
+
         if ($this->request->isPost && $model->load($this->request->post())) {
-            $model->approve_name = $identity->thai_name;
-            $model->approve_date =  $today;
-            $model->status_id = 2;
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', Yii::t('app', 'Success'));
-                return $this->redirect(['view', 'id' => $model->id]);
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $model->approve_name = $identity->thai_name;
+                $model->approve_date = $today;
+                $model->status_id = 2; // Approved status
+
+                if ($model->save()) {
+                    $transaction->commit();
+                    Yii::$app->session->setFlash('success', Yii::t('app', 'Approval successful.'));
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    throw new Exception(Yii::t('app', 'Failed to save approval.'));
+                }
+            } catch (Exception $e) {
+                $transaction->rollBack();
+                Yii::$app->session->setFlash('error', $e->getMessage());
             }
         }
 
         return $this->render('approval', [
             'model' => $model,
-
         ]);
     }
- 
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);

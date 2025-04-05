@@ -151,26 +151,33 @@ class WorkOrderController extends Controller
 
         $today = date("Y-m-d");
         $identity = Yii::$app->user->identity ?: 'Anonymous';
+
         if ($this->request->isPost && $model->load($this->request->post())) {
-            $model->approve_name = $identity->thai_name;
-            $model->approve_date =  $today;
-            if ($model->save()) {
-                // Update the ticket's status to "In Progress"
-                $modelTicket->status_id = 4; // Engineer Approved
-                if ($modelTicket->save()) {
-                    Yii::$app->session->setFlash('success', Yii::t('app', 'Work order created and ticket status updated successfully.'));
-                    return $this->redirect(['view', 'id' => $model->id]);
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $model->approve_name = $identity->thai_name;
+                $model->approve_date = $today;
+
+                if ($model->save()) {
+                    $modelTicket->status_id = 4; // Engineer Approved
+                    if ($modelTicket->save()) {
+                        $transaction->commit();
+                        Yii::$app->session->setFlash('success', Yii::t('app', 'Approval successful and ticket status updated.'));
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    } else {
+                        throw new Exception(Yii::t('app', 'Failed to update ticket status.'));
+                    }
                 } else {
-                    Yii::$app->session->setFlash('error', Yii::t('app', 'Failed to update ticket status.'));
+                    throw new Exception(Yii::t('app', 'Failed to save work order.'));
                 }
-            } else {
-                Yii::$app->session->setFlash('error', Yii::t('app', 'Failed to save work order.'));
+            } catch (Exception $e) {
+                $transaction->rollBack();
+                Yii::$app->session->setFlash('error', $e->getMessage());
             }
         }
 
         return $this->render('approval', [
             'model' => $model,
-
         ]);
     }
  
