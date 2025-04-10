@@ -26,7 +26,8 @@ $users = !$isGuest && $employeeId;
                     
                     ['label' => Yii::t('app', 'Engineer'), 'header' => true, 'options' => ['style' => 'color: yellow;']],
                     ['label' => Yii::t('app', 'รายการรอซ่อม'), 'url' => ['/tasks/ticket/index-process'], 'iconStyle' => 'fa', 'icon' => 'fa-solid fa-spinner'],
-                    ['label' => Yii::t('app', 'รายการสั่งซ่อม'), 'url' => ['/tasks/work-order/index'], 'iconStyle' => 'fa', 'icon' => 'fa-solid fa-screwdriver-wrench'],
+                    ['label' => Yii::t('app', 'รายการอนุมัติ'), 'url' => ['/tasks/work-order/index'], 'iconStyle' => 'fa', 'icon' => 'fa-solid fa-screwdriver-wrench'],
+                    // ['label' => Yii::t('app', 'รายการอนุมัติซ่อม'), 'url' => ['/tasks/work-order/index-approval'], 'iconStyle' => 'fa', 'icon' => 'fa-solid fa-sun'],
                     ['label' => Yii::t('app', 'รายการงานสิ้นสุด'), 'url' => ['/tasks/ticket/index-complete'], 'iconStyle' => 'fa', 'icon' => 'fa-solid fa-thumbs-up'],
 
                     ['label' => Yii::t('app', 'Config'), 'header' => true, 'options' => ['style' => 'color: yellow;']],

@@ -39,7 +39,7 @@ class WorkOrderController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => WorkOrder::find(),
             'pagination' => [
-                'pageSize' => 4,
+                'pageSize' => 8,
             ],
             'sort' => [
                 'defaultOrder' => ['id' => SORT_DESC], // ล่าสุดก่อน

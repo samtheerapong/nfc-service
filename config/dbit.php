@@ -2,7 +2,8 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=data-nfc',
+    // 'dsn' => 'mysql:host=localhost;dbname=data-nfc',
+    'dsn' => 'mysql:host=localhost;dbname=data-itms',
     'username' => 'sam',
     'password' => 'sam',
     'charset' => 'utf8',
