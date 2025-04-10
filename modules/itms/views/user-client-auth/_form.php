@@ -36,7 +36,8 @@ use kartik\widgets\ActiveForm;
                     Profile::find()->where(['status_id' => 1])->all(),
                     'id',
                     function ($dataValue, $defaultValue) {
-                        return $dataValue->thai_name . ' : ' . ($dataValue->department_id && $dataValue->department0 ? $dataValue->department0->name : '');
+                        $msg = $dataValue->thai_name . ($dataValue->department_id && $dataValue->department0 ?  ' แผนก' . $dataValue->department0->name : '');
+                        return  $msg;
                     }
                 ),
                 'options' => ['placeholder' => Yii::t('app', 'Select...')],
