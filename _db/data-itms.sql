@@ -42,7 +42,7 @@ CREATE TABLE `accessories` (
   `updated_at` varchar(45) DEFAULT NULL,
   `status_id` int DEFAULT '1' COMMENT 'รหัสสินทรัพย์',
   `ref_code` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `accessories`
@@ -72,7 +72,7 @@ CREATE TABLE `accessory_types` (
   `name` varchar(45) NOT NULL,
   `description` text,
   `color` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `accessory_types`
@@ -98,7 +98,7 @@ CREATE TABLE `auto_number` (
   `number` int DEFAULT NULL,
   `optimistic_lock` int DEFAULT NULL,
   `update_time` int DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `auto_number`
@@ -134,7 +134,7 @@ CREATE TABLE `computers` (
   `created_at` varchar(45) DEFAULT NULL,
   `updated_at` varchar(45) DEFAULT NULL,
   `ref_code` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `computers`
@@ -162,7 +162,7 @@ CREATE TABLE `connectivity_types` (
   `id` int NOT NULL,
   `name` varchar(100) NOT NULL,
   `category` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -187,7 +187,7 @@ CREATE TABLE `monitors` (
   `updated_at` varchar(45) DEFAULT NULL,
   `status_id` int DEFAULT '1' COMMENT 'สถานะ',
   `ref_code` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `monitors`
@@ -224,7 +224,7 @@ CREATE TABLE `parts` (
   `description` text,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `parts`
@@ -259,7 +259,7 @@ CREATE TABLE `printers` (
   `updated_at` varchar(45) DEFAULT NULL,
   `status_id` int DEFAULT '1' COMMENT 'สถานะ',
   `ref_code` varchar(45) DEFAULT NULL COMMENT 'REF'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `printers`
@@ -305,7 +305,7 @@ CREATE TABLE `profile` (
   `approve_name` varchar(45) DEFAULT NULL COMMENT 'ผู้อนุมัติ',
   `approve_date` varchar(45) DEFAULT NULL COMMENT 'วันที่อนุมัติ',
   `ref_code` varchar(45) DEFAULT NULL COMMENT 'REF.'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `profile`
@@ -362,7 +362,7 @@ CREATE TABLE `repair_costs` (
   `amount` decimal(10,2) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `repair_costs`
@@ -393,7 +393,7 @@ CREATE TABLE `repair_requests` (
   `approval_comment` text,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `repair_requests`
@@ -460,7 +460,7 @@ CREATE TABLE `software` (
   `updated_at` varchar(45) DEFAULT NULL,
   `ref_code` varchar(45) DEFAULT NULL,
   `status_id` int DEFAULT '1' COMMENT 'สถานะ'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `software`
@@ -485,7 +485,7 @@ CREATE TABLE `status` (
   `name` varchar(45) DEFAULT NULL,
   `color` varchar(45) DEFAULT NULL,
   `category` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `status`
@@ -514,7 +514,7 @@ CREATE TABLE `stock` (
   `last_restock_date` date DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `stock`
@@ -542,7 +542,7 @@ CREATE TABLE `stock_transactions` (
   `notes` text,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `stock_transactions`
@@ -570,7 +570,7 @@ CREATE TABLE `uploads` (
   `real_filename` varchar(150) DEFAULT NULL COMMENT 'ชื่อไฟล์จริง',
   `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `type` int DEFAULT NULL COMMENT 'ประเภท'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -594,7 +594,7 @@ CREATE TABLE `user_client_auth` (
   `operator_comment` text COMMENT 'ความคิดเห็น',
   `recorder_date` varchar(45) DEFAULT NULL COMMENT 'วันที่บันทึก',
   `ref_code` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `user_client_auth`
