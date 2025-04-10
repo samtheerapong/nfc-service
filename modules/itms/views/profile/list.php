@@ -2,34 +2,31 @@
 
 use app\modules\itms\models\Profile;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\ActionColumn;
 use yii\widgets\ListView;
 
-/** @var yii\web\View $this */
-/** @var app\modules\itms\models\search\ProfileSearch $searchModel */
-/** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = Yii::t('app', 'Profiles');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="profile-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a(Yii::t('app', 'Create Profile'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+        <?= Html::a('<i class="fa-solid fa-home"></i> ' . Yii::t('app', 'Home'), ['index'], ['class' => 'btn btn-primary btn-sm btn-w100']) ?>
+        <?= Html::a('<i class="fa-solid fa-triangle-exclamation"></i> ' . Yii::t('app', 'เพิ่มการแจ้งซ่อม'), ['create'], ['class' => 'btn btn-danger btn-sm btn-w100']) ?></p>
+    <div class="card">
+        <div class="card-header text-white bg-info">
+            <?= $this->title  ?>
+        </div>
+        <div class="card-body">
+            <div class="row">
 
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+                <?= ListView::widget([
+                    'dataProvider' => $dataProvider,
+                    'options' => ['class' => 'row'],
+                    'itemOptions' => ['class' => 'col-lg-3 col-md-4 mb-3'],
+                    'itemView' => '_list',
+                ]) ?>
 
-    <?= ListView::widget([
-        'dataProvider' => $dataProvider,
-        'itemOptions' => ['class' => 'item'],
-        'itemView' => function ($model, $key, $index, $widget) {
-            return Html::a(Html::encode($model->id), ['view', 'id' => $model->id]);
-        },
-    ]) ?>
-
-
+            </div>
+        </div>
+    </div>
 </div>
