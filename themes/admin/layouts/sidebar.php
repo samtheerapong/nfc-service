@@ -10,6 +10,26 @@ use yii\helpers\Url;
         <nav class="mt-2">
             <?= \hail812\adminlte\widgets\Menu::widget([
                 'items' => [
+                    [
+                        // 'visible' => $notUser,
+                        'label' => Yii::t('app', 'MSW'),
+                        'iconStyle' => 'bx',
+                        'icon' => 'bx bxs-flask text-warning',
+                        'items' => [
+                            // ITMS
+                            [
+                                'label' => Yii::t('app', 'MSW Tasks'),
+                                'iconStyle' => 'fa',
+                                'icon' => 'fa-solid fa-circle-chevron-down',
+                                'items' => [
+                                    ['label' => Yii::t('app', 'budget'), 'url' => ['/msw/budget/index'], 'iconStyle' => 'bx', 'icon' => 'bx bxs-home text-success'],
+                                    ['label' => Yii::t('app', 'budget-item'), 'url' => ['/msw/budget-item/index'], 'iconStyle' => 'bx', 'icon' => 'bx bxs-home text-success'],
+                                    ['label' => Yii::t('app', 'dashboard'), 'url' => ['/msw/budget/dashboard'], 'iconStyle' => 'bx', 'icon' => 'bx bxs-home text-success'],
+                                   
+                                ],
+                            ],
+                        ],
+                    ],
                     ['label' => Yii::t('app', 'Home'), 'url' => ['/site/index'], 'iconStyle' => 'bx', 'icon' => 'bx bxs-home text-success'],
                     ['label' => Yii::t('app', 'แจ้งงาน'), 'url' => ['/tasks/ticket/create'], 'iconStyle' => 'fa', 'icon' => 'fa-solid fa-wrench'],
                     ['label' => Yii::t('app', 'รายการแจ้งของแผนก'), 'url' => ['/tasks/ticket/index'], 'iconStyle' => 'fa', 'icon' => 'fa-regular fa-rectangle-list'],
